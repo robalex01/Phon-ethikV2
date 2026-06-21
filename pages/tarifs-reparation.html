@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="../assets/logo-phonethik-real.png">
+    <title>Tarifs de réparation | Phon'Ethik Lyon</title>
+    <meta name="description" content="Tarifs de réparation par marque et modèle chez Phon'Ethik Lyon. iPhone, Samsung, Xiaomi, Google Pixel et plus. 911 produits référencés.">
+    <link rel="canonical" href="./tarifs-reparation.html">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+      /* Search bar */
+      .wizard-search {
+        position: relative;
+        margin-bottom: 20px;
+      }
+      .wizard-search input {
+        width: 100%;
+        padding: 14px 16px 14px 44px;
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--paper);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: border-color 0.2s;
+      }
+      .wizard-search input:focus {
+        outline: none;
+        border-color: var(--navy);
+      }
+      .wizard-search::before {
+        content: "🔍";
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        pointer-events: none;
+      }
+
+      /* Device type tabs */
+      .device-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .device-tab {
+        padding: 10px 18px;
+        border-radius: 99px;
+        font-size: 0.86rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1.5px solid var(--line);
+        background: var(--paper);
+        color: var(--muted);
+        white-space: nowrap;
+        transition: all 0.2s;
+        font-family: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .device-tab.is-active {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      /* Brand grid */
+      .brands-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 14px;
+      }
+      .brand-tile {
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px 12px 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.22s;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-tile:hover {
+        border-color: var(--navy);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+      .brand-tile-logo {
+        height: 56px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+      }
+      .brand-tile-logo img {
+        max-width: 100%;
+        max-height: 52px;
+        object-fit: contain;
+      }
+      .brand-tile-name {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .brand-tile:hover .brand-tile-name { color: var(--navy); }
+      .brand-tile-count {
+        font-size: 0.7rem;
+        color: var(--soft);
+      }
+
+      /* Models grid */
+      .models-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 12px;
+      }
+      @media (max-width: 600px) {
+        .models-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      .model-tile {
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.22s;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+      }
+      .model-tile:hover {
+        border-color: var(--navy);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+      }
+      .model-tile-illustration {
+        width: 100%;
+        aspect-ratio: 1 / 1.1;
+        background: linear-gradient(135deg, var(--surface), var(--surface-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px 24px;
+        position: relative;
+      }
+      .model-tile-illustration svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 8px 16px rgba(30, 58, 95, 0.18));
+      }
+      .model-tile-illustration img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 18px rgba(30, 58, 95, 0.18));
+      }
+      .model-tile-info {
+        padding: 12px 14px 14px;
+        border-top: 1px solid var(--line);
+      }
+      .model-tile-name {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--ink);
+        margin-bottom: 4px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .model-tile-prices {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .model-tile-from {
+        font-size: 0.66rem;
+        color: var(--soft);
+        font-weight: 500;
+      }
+      .model-tile-min {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: var(--navy);
+      }
+
+      /* Repair list */
+      .repair-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .repair-row {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        transition: all 0.2s;
+      }
+      .repair-row:hover {
+        border-color: var(--navy);
+        box-shadow: var(--shadow-sm);
+      }
+      .repair-row-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--ink);
+      }
+      .repair-row-price {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: var(--navy);
+        white-space: nowrap;
+      }
+      .repair-row-price.unavailable {
+        color: var(--soft);
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        background: var(--surface);
+        border-radius: var(--radius);
+        color: var(--muted);
+      }
+
+      /* ═══════════════════════════════════════════════════════════
+         MODULE FICHE PRODUIT (style iTelier)
+         ═══════════════════════════════════════════════════════════ */
+      .product-page {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-bottom: 40px;
+      }
+      @media (min-width: 900px) {
+        .product-page { grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+      }
+
+      /* ─── GALERIE ─── */
+      .product-gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .product-gallery-main {
+        background: linear-gradient(135deg, var(--surface), var(--surface-2));
+        border-radius: var(--radius-lg);
+        aspect-ratio: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px;
+        transition: transform 0.4s ease;
+      }
+      .product-gallery-main svg,
+      .product-gallery-main img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 16px 32px rgba(30, 58, 95, 0.25));
+      }
+      .product-gallery-thumbs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .product-gallery-thumb {
+        background: var(--surface);
+        border: 2px solid var(--line);
+        border-radius: var(--radius-sm);
+        aspect-ratio: 1 / 1;
+        padding: 12px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .product-gallery-thumb svg,
+      .product-gallery-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0.7;
+      }
+      .product-gallery-thumb.is-active {
+        border-color: var(--navy);
+      }
+      .product-gallery-thumb.is-active svg,
+      .product-gallery-thumb.is-active img { opacity: 1; }
+      .product-gallery-thumb:nth-child(2) svg,
+      .product-gallery-thumb:nth-child(2) img { transform: rotateY(180deg); }
+      .product-gallery-thumb:nth-child(3) svg,
+      .product-gallery-thumb:nth-child(3) img { transform: rotate(-15deg) scale(0.85); }
+      .product-gallery-thumb:nth-child(4) svg,
+      .product-gallery-thumb:nth-child(4) img { transform: rotate(15deg) scale(0.85); }
+
+      /* ─── INFOS PRODUIT ─── */
+      .product-info { padding: 0; }
+      .product-breadcrumb {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+      .product-breadcrumb a { color: var(--navy); }
+      .product-breadcrumb a:hover { text-decoration: underline; }
+
+      .product-tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--navy);
+        background: var(--navy-pale);
+        padding: 4px 10px;
+        border-radius: 99px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .product-title {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin-bottom: 14px;
+        color: var(--ink);
+      }
+      .product-desc {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+
+      .product-badges {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .product-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        background: var(--surface);
+        border-radius: var(--radius);
+        font-size: 0.82rem;
+        line-height: 1.3;
+      }
+      .product-badge > span:first-child {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+      }
+      .product-badge strong { color: var(--ink); font-weight: 700; }
+
+      .product-section-label {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--ink);
+        margin-bottom: 12px;
+      }
+
+      /* ─── PASTILLES RÉPARATIONS ─── */
+      .repair-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      .repair-pill {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        padding: 10px 14px;
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        text-align: left;
+        min-width: 130px;
+      }
+      .repair-pill:hover {
+        border-color: var(--navy);
+        transform: translateY(-1px);
+      }
+      .repair-pill.is-active {
+        background: var(--navy-pale);
+        border-color: var(--navy);
+      }
+      .repair-pill-name {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+      .repair-pill.is-active .repair-pill-name { color: var(--navy); }
+      .repair-pill-price {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--navy);
+      }
+      .repair-pill.is-unavailable { opacity: 0.6; }
+      .repair-pill.is-unavailable .repair-pill-price { color: var(--soft); }
+
+      /* ─── PRIX SÉLECTIONNÉ ─── */
+      .product-selected {
+        background: var(--navy-pale);
+        border: 1.5px solid var(--navy-border);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .product-selected-name {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .product-selected-price {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 800;
+        font-size: 2.2rem;
+        color: var(--navy);
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      .product-selected-note {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      /* ─── CTAs ─── */
+      .product-ctas {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .product-rating {
+        font-size: 0.85rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .product-rating .stars { color: #f59e0b; font-size: 1rem; letter-spacing: 0.05em; }
+      .product-rating strong { color: var(--ink); }
+      .product-rating a { color: var(--navy); text-decoration: underline; }
+
+      /* ─── OFFRES SPÉCIALES ─── */
+      .offers-section {
+        margin: 40px 0;
+        padding: 32px;
+        background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+        color: #fff;
+        border-radius: var(--radius-xl);
+      }
+      .offers-section h2 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+        color: #fff;
+      }
+      .offers-sub {
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 24px;
+      }
+      .offers-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      @media (min-width: 700px) { .offers-grid { grid-template-columns: 1fr 1fr; } }
+      .offer-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: var(--radius);
+        padding: 24px;
+        backdrop-filter: blur(8px);
+      }
+      .offer-percent {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 800;
+        font-size: 2.5rem;
+        color: #ffd700;
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      .offer-card h3 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: #fff;
+      }
+      .offer-card p {
+        font-size: 0.85rem;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ─── FAQ ─── */
+      .product-faq {
+        margin: 40px 0;
+      }
+      .product-faq h2 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+      }
+      .faq-item {
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius);
+        padding: 16px 20px;
+        margin-bottom: 8px;
+        transition: border-color 0.2s;
+      }
+      .faq-item[open] { border-color: var(--navy); }
+      .faq-item summary {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        list-style: none;
+        position: relative;
+        padding-right: 32px;
+        color: var(--ink);
+      }
+      .faq-item summary::-webkit-details-marker { display: none; }
+      .faq-item summary::after {
+        content: '+';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.4rem;
+        color: var(--navy);
+        font-weight: 300;
+        transition: transform 0.2s;
+      }
+      .faq-item[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+      .faq-content {
+        padding-top: 14px;
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .faq-content p { margin-bottom: 10px; }
+      .faq-content p:last-child { margin-bottom: 0; }
+
+      /* ─── TRUST ROW ─── */
+      .trust-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin: 40px 0;
+        padding: 24px;
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+      }
+      @media (min-width: 700px) { .trust-row { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 1000px) { .trust-row { grid-template-columns: repeat(4, 1fr); } }
+      .trust-row-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .trust-row-icon {
+        width: 44px;
+        height: 44px;
+        background: var(--navy-pale);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+      .trust-row-item strong { color: var(--ink); font-size: 0.9rem; }
+      .trust-row-item small { color: var(--muted); font-size: 0.78rem; }
+    </style>
+  </head>
+  <body>
+    <div class="announce-bar">
+      📍 Ouvert Lun–Ven 10h–19h · <a href="tel:+33951948881">09 51 94 88 81</a> — appel gratuit
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="../index.html"><img src="../assets/logo-phonethik-real.png" alt="Phon'Ethik"></a>
+      <button class="menu-toggle" type="button"><span></span><span></span><span></span></button>
+      <nav id="main-nav" class="main-nav">
+        <a href="../index.html">Accueil</a>
+        <a href="./tarifs-reparation.html" class="is-active">Tarifs</a>
+        <a href="./avis-clients.html">Avis</a>
+        <a href="./contact-horaires.html">Contact</a>
+        <a class="nav-cta" href="tel:+33951948881">09 51 94 88 81</a>
+        <div class="theme-switch">
+          <button type="button" data-theme-choice="light">Clair</button>
+          <button type="button" data-theme-choice="dark">Sombre</button>
+          <button type="button" data-theme-choice="auto">Auto</button>
+        </div>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <h1>Tarifs de <em>réparation</em></h1>
+      <p>Catalogue de plus de 900 modèles. Choisissez votre appareil et votre marque pour découvrir tous les prix.</p>
+      <div class="page-badges">
+        <span class="page-badge">✓ 911 modèles référencés</span>
+        <span class="page-badge">✓ Devis gratuit</span>
+        <span class="page-badge">✓ Garantie incluse</span>
+      </div>
+    </section>
+
+    <div class="step-bar">
+      <div class="step-item"><div class="step-dot is-active" id="dot1">1</div><span class="step-label is-active" id="lbl1">Marque</span></div>
+      <span class="step-sep">›</span>
+      <div class="step-item"><div class="step-dot" id="dot2">2</div><span class="step-label" id="lbl2">Modèle</span></div>
+      <span class="step-sep">›</span>
+      <div class="step-item"><div class="step-dot" id="dot3">3</div><span class="step-label" id="lbl3">Tarifs</span></div>
+    </div>
+
+    <main>
+      <!-- ─── ÉTAPE 1 : MARQUES ─── -->
+      <section id="step1" class="wizard">
+        <div class="wizard-head">
+          <p class="eyebrow">Étape 1 · Choisir l'appareil et la marque</p>
+          <h2>Quel appareil souhaitez-vous réparer ?</h2>
+        </div>
+
+        <div class="device-tabs" id="deviceTabs"></div>
+        <div class="brands-grid" id="brandsGrid"></div>
+      </section>
+
+      <!-- ─── ÉTAPE 2 : MODÈLES ─── -->
+      <section id="step2" class="wizard hidden">
+        <div class="wizard-head">
+          <button class="back-btn" onclick="goStep(1)">← Toutes les marques</button>
+          <p class="eyebrow">Étape 2 · Choisir le modèle</p>
+          <h2 id="step2Title">Sélectionnez votre modèle</h2>
+        </div>
+
+        <div class="wizard-search">
+          <input type="search" id="modelSearch" placeholder="Rechercher un modèle…" autocomplete="off">
+        </div>
+
+        <div class="models-grid" id="modelsGrid"></div>
+      </section>
+
+      <!-- ─── ÉTAPE 3 : MODULE FICHE PRODUIT (style iTelier) ─── -->
+      <section id="step3" class="wizard hidden">
+        <button class="back-btn" onclick="goStep(2)" style="margin-bottom:16px;">← Retour aux modèles</button>
+
+        <div class="product-page">
+          <!-- Colonne gauche : illustration -->
+          <div class="product-gallery">
+            <div class="product-gallery-main" id="productGalleryMain"></div>
+            <div class="product-gallery-thumbs" id="productGalleryThumbs"></div>
+          </div>
+
+          <!-- Colonne droite : infos et sélection -->
+          <div class="product-info">
+            <p class="product-breadcrumb" id="productBreadcrumb"></p>
+            <p class="product-tag">Service de réparation</p>
+            <h1 class="product-title" id="step3Title">Modèle</h1>
+            <p class="product-desc">
+              Confiez votre appareil à nos techniciens pour une réparation de qualité au juste prix.
+              Retrouvez-nous à Lyon dans notre boutique du <strong>138 cours Lafayette</strong>, pendant les horaires d'ouverture.
+            </p>
+
+            <div class="product-badges">
+              <div class="product-badge"><span>🔍</span><div><strong>Diagnostic</strong><br>& devis gratuit</div></div>
+              <div class="product-badge"><span>🛡️</span><div><strong>Garantie</strong><br>12 mois incluse</div></div>
+              <div class="product-badge"><span>⚡</span><div><strong>Service</strong><br>rapide</div></div>
+              <div class="product-badge"><span>💳</span><div><strong>Paiement</strong><br>au succès</div></div>
+            </div>
+
+            <div class="product-section-label">Réparations :</div>
+            <div class="repair-pills" id="repairPills"></div>
+
+            <div class="product-selected" id="productSelected">
+              <div class="product-selected-name" id="selectedName">Sélectionnez une réparation</div>
+              <div class="product-selected-price" id="selectedPrice">—</div>
+              <p class="product-selected-note">Pièce, main-d'œuvre et taxes incluses.</p>
+            </div>
+
+            <div class="product-ctas">
+              <a href="tel:+33951948881" class="btn btn-primary btn-lg btn-full">📞 Appeler 09 51 94 88 81</a>
+              <a href="./contact-horaires.html" class="btn btn-secondary btn-lg btn-full">📍 Venir en boutique</a>
+            </div>
+
+            <div class="product-rating">
+              <span class="stars">★★★★★</span>
+              sur <strong>+250</strong> avis Google
+              <a href="./avis-clients.html">Voir les avis</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Offres spéciales -->
+        <div class="offers-section">
+          <h2>🎁 Profitez de nos offres</h2>
+          <p class="offers-sub">Ne passez pas à côté de nos remises !</p>
+          <div class="offers-grid">
+            <div class="offer-card">
+              <div class="offer-percent">-50%</div>
+              <h3>sur la 2ème réparation</h3>
+              <p>Offre de <strong>-50%</strong> sur la seconde réparation (la moins chère), valable suite à une première réparation sur le même appareil effectuée et facturée au même moment. <em>Offre non cumulable.</em></p>
+            </div>
+            <div class="offer-card">
+              <div class="offer-percent">-30%</div>
+              <h3>sur nos accessoires</h3>
+              <p>Offre de <strong>-30%</strong> sur notre catalogue d'accessoires, valable suite à une réparation, à l'achat d'un reconditionné ou sur le second achat d'un accessoire. <em>Offre non cumulable.</em></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="product-faq">
+          <h2>❓ Questions fréquentes</h2>
+          <details class="faq-item">
+            <summary>Quel est le délai pour réparer mon appareil ?</summary>
+            <div class="faq-content">
+              <p>La durée de réparation dépend du modèle de votre appareil, du type de panne et de la disponibilité de la pièce.</p>
+              <p><strong>En boutique à Lyon</strong>, la plupart des réparations sont réalisées entre <strong>30 minutes et 1h30</strong>. Pour certaines interventions plus techniques, le délai peut être un peu plus long. Nos techniciens vous communiquent une estimation précise après diagnostic.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment se passe une réparation en boutique ?</summary>
+            <div class="faq-content">
+              <p>Vous pouvez venir directement dans notre boutique située au <strong>138 cours Lafayette, 69003 Lyon</strong>, au cœur du 3ème arrondissement, à proximité de <strong>Part-Dieu</strong>.</p>
+              <p>Sur place, nos techniciens réalisent un <strong>diagnostic gratuit</strong> et vous expliquent clairement l'intervention, le tarif et le délai estimé.</p>
+              <p>Pour limiter l'attente, vous pouvez appeler la boutique avant votre passage.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Faut-il donner le code de déverrouillage ?</summary>
+            <div class="faq-content">
+              <p>Vous n'êtes <strong>pas obligé</strong> de nous communiquer le code de votre appareil. Toutefois, il peut être utile pour effectuer des <strong>tests complets après réparation</strong> (écran, tactile, microphone, caméras, etc.).</p>
+              <p>Si vous préférez ne pas le transmettre, nous pouvons intervenir malgré tout, mais certains tests ne pourront pas être réalisés immédiatement.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Mes données sont-elles conservées pendant la réparation ?</summary>
+            <div class="faq-content">
+              <p>Dans la grande majorité des cas, <strong>vos données sont conservées</strong>. La plupart des interventions sur smartphone, tablette ou ordinateur n'impliquent pas d'effacement du contenu.</p>
+              <p>Si une réinitialisation devait être nécessaire, <strong>vous en seriez toujours informé avant toute opération</strong>.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Les réparations sont-elles garanties ?</summary>
+            <div class="faq-content">
+              <p>Oui, toutes nos réparations sont <strong>garanties 12 mois</strong>. Cette garantie couvre le bon fonctionnement de l'intervention réalisée et des pièces remplacées.</p>
+              <p>La garantie ne s'applique pas en cas de <strong>nouvelle casse</strong>, de <strong>contact avec un liquide / oxydation</strong>, de <strong>vol</strong>, ou de dommage causé après la réparation.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quels moyens de paiement acceptez-vous ?</summary>
+            <div class="faq-content">
+              <p>Nous acceptons : <strong>carte bancaire</strong> (avec ou sans contact), <strong>Apple Pay</strong>, <strong>Google Pay</strong>, <strong>espèces</strong> et <strong>chèques</strong>.</p>
+              <p>Le paiement s'effectue <strong>uniquement après validation de la réparation</strong>.</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Trust badges row -->
+        <div class="trust-row">
+          <div class="trust-row-item"><div class="trust-row-icon">📦</div><div><strong>Diagnostic gratuit</strong><br><small>Sans engagement</small></div></div>
+          <div class="trust-row-item"><div class="trust-row-icon">🛡️</div><div><strong>Garantie 12 mois</strong><br><small>Sur toutes réparations</small></div></div>
+          <div class="trust-row-item"><div class="trust-row-icon">💳</div><div><strong>Paiement sécurisé</strong><br><small>CB, Apple Pay, espèces</small></div></div>
+          <div class="trust-row-item"><div class="trust-row-icon">❤️</div><div><strong>Réparé avec soin</strong><br><small>Par nos experts</small></div></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="sticky-cta">
+      <a href="tel:+33951948881" class="cta-tel">📞 09 51 94 88 81</a>
+      <a href="./contact-horaires.html" class="cta-rdv">📍 Venir</a>
+    </div>
+
+    <footer class="site-footer">
+      <div><strong>Phon'Ethik</strong><p>138 cours Lafayette, 69003 Lyon</p></div>
+      <nav><a href="../index.html">Accueil</a><a href="./avis-clients.html">Avis</a><a href="./contact-horaires.html">Contact</a><a href="./mentions-legales.html">Mentions légales</a></nav>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="../assets/data/itelier-prices.js"></script>
+    <script>
+      // ─── Illustrations SVG par type d'appareil ────────────────
+      function phoneSVG(color) {
+        return `<svg viewBox="0 0 120 240" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="112" height="232" rx="18" fill="${color}" stroke="#2a2a30" stroke-width="1.5"/>
+          <rect x="7" y="7" width="106" height="226" rx="15" fill="#0f0f1e"/>
+          <rect x="44" y="14" width="32" height="9" rx="4.5" fill="#000"/>
+        </svg>`;
+      }
+      function tabletSVG(color) {
+        return `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="192" height="232" rx="14" fill="${color}" stroke="#a0a3a8" stroke-width="1.5"/>
+          <rect x="12" y="12" width="176" height="216" rx="6" fill="#1a1a2e"/>
+        </svg>`;
+      }
+      function laptopSVG(color) {
+        return `<svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="10" width="200" height="120" rx="6" fill="${color}" stroke="#9aa3b0" stroke-width="1.5"/>
+          <rect x="26" y="16" width="188" height="108" rx="3" fill="#0f1224"/>
+          <path d="M0 130 L240 130 L228 152 L12 152 Z" fill="${color}" stroke="#9aa3b0" stroke-width="1.5"/>
+          <rect x="110" y="135" width="20" height="3" rx="1.5" fill="#666"/>
+        </svg>`;
+      }
+      function consoleSVG(color) {
+        return `<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="20" width="192" height="100" rx="14" fill="${color}" stroke="#2a2a3a" stroke-width="1.5"/>
+          <rect x="48" y="28" width="104" height="84" rx="6" fill="#0f1224"/>
+          <circle cx="26" cy="70" r="10" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="174" cy="70" r="6" fill="rgba(255,255,255,0.3)"/>
+        </svg>`;
+      }
+      function watchSVG(color) {
+        return `<svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="10" width="40" height="20" rx="6" fill="#444"/>
+          <rect x="40" y="170" width="40" height="20" rx="6" fill="#444"/>
+          <rect x="30" y="50" width="60" height="100" rx="14" fill="${color}" stroke="#222" stroke-width="2"/>
+          <rect x="36" y="58" width="48" height="84" rx="9" fill="#0a0e1f"/>
+        </svg>`;
+      }
+
+      // ─── Mapping des marques avec leurs logos SVG ──────────────
+      const BRAND_LOGOS = {
+        'Apple': '../assets/brands/apple.svg',
+        'Samsung': '../assets/brands/samsung.svg',
+        'Google Pixel': '../assets/brands/google.svg',
+        'Xiaomi': '../assets/brands/xiaomi.svg',
+        'Huawei': '../assets/brands/huawei.svg',
+        'Honor': '../assets/brands/honor.svg',
+        'Oppo': '../assets/brands/oppo.svg',
+        'OnePlus': '../assets/brands/oneplus.svg',
+        'Microsoft': null,
+        'Nintendo': '../assets/brands/nintendo.svg',
+        'Autres': null,
+      };
+
+      // Couleurs par modèle (heuristique sur nom du modèle)
+      function modelColor(modelName, brand) {
+        if (/Pro Max|Ultra/i.test(modelName)) return '#1a1a2e';
+        if (/Pro|Premium/i.test(modelName)) return '#3a3a4a';
+        if (/Plus/i.test(modelName)) return '#7a8e9a';
+        if (/Mini|SE/i.test(modelName)) return '#c8302e';
+        if (/Lite/i.test(modelName)) return '#a8c8d8';
+        if (brand === 'Apple') return '#4a6a8f';
+        if (brand === 'Samsung') return '#2d527a';
+        if (brand === 'Google Pixel') return '#7ea8e8';
+        if (brand === 'Xiaomi') return '#ff6900';
+        return '#3a3a4a';
+      }
+
+      // SVG selon type d'appareil
+      function modelSVG(modelName, deviceType, brand) {
+        const color = modelColor(modelName, brand);
+        if (deviceType === 'Montre' || /Watch/i.test(modelName))
+          return watchSVG(color);
+        if (deviceType === 'Tablette' || /iPad|Tab |MatePad|Pad |Surface Pro|Surface Go/i.test(modelName))
+          return tabletSVG(color);
+        if (deviceType === 'Ordinateur' || /Macbook|iMac|Surface Laptop|Surface Studio/i.test(modelName))
+          return laptopSVG(color);
+        if (/Switch/i.test(modelName))
+          return consoleSVG(color);
+        return phoneSVG(color);
+      }
+
+      const REAL_PHONE_IMAGES = [
+        { test: /iPhone 15|iPhone 16|iPhone 17/i, url: "https://theapplewiki.com/images/applewiki/thumb/c/c6/IPhone_15_Pro.png/400px-IPhone_15_Pro.png" },
+        { test: /iPhone 14/i, url: "https://theapplewiki.com/images/applewiki/thumb/d/dc/IPhone_14_Pro.png/400px-IPhone_14_Pro.png" },
+        { test: /iPhone 13|iPhone 12/i, url: "https://theapplewiki.com/images/applewiki/thumb/3/37/IPhone_13.png/400px-IPhone_13.png" },
+        { test: /iPhone 11|iPhone X|iPhone XR|iPhone XS/i, url: "https://theapplewiki.com/images/applewiki/thumb/4/47/IPhone_11.png/400px-IPhone_11.png" },
+        { test: /Galaxy S2[3-5]|Galaxy Note|Ultra/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg" },
+        { test: /Galaxy S2[0-2]/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s23-ultra-5g-1.jpg" },
+        { test: /Galaxy A|Galaxy M/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a55-1.jpg" },
+        { test: /Galaxy Z|Fold|Flip/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg" },
+        { test: /Redmi Note|Redmi/i, brand: "Xiaomi", url: "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-5g-1.jpg" },
+        { test: /Poco/i, brand: "Xiaomi", url: "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-5g-1.jpg" },
+        { test: /Xiaomi|Mi /i, brand: "Xiaomi", url: "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-14-1.jpg" }
+      ];
+
+      function realPhoneImage(modelName, brand) {
+        const match = REAL_PHONE_IMAGES.find(item =>
+          (!item.brand || item.brand === brand) && item.test.test(modelName)
+        );
+        return match ? match.url : null;
+      }
+
+      // Retourne une <img> avec vraie image produit OU un SVG inline en fallback
+      function modelImage(modelName, deviceType, brand) {
+        const photoUrl = realPhoneImage(modelName, brand);
+        if (photoUrl) {
+          return `<img src="${photoUrl}" alt="${modelName}" loading="lazy"
+            onerror="this.outerHTML='${modelSVG(modelName, deviceType, brand).replace(/'/g, "&#39;")}'">`;
+        }
+        return modelSVG(modelName, deviceType, brand);
+      }
+
+      // ─── Données catalogue ────────────────────────────────────
+      const CATALOG = (window.ITELIER_PRICE_DATA || {}).catalog || {};
+      const DEVICE_TYPES = Object.keys(CATALOG);
+      const DEVICE_ICONS = { Smartphone: '📱', Ordinateur: '💻', Tablette: '📋', Montre: '⌚', Accessoire: '🎮' };
+
+      let state = { deviceType: DEVICE_TYPES[0] || 'Smartphone', brand: null, model: null };
+
+      // ─── Rendu des tabs Appareil ──────────────────────────────
+      function renderDeviceTabs() {
+        const tabs = document.getElementById('deviceTabs');
+        tabs.innerHTML = DEVICE_TYPES.map(type =>
+          `<button class="device-tab${type === state.deviceType ? ' is-active' : ''}" onclick="selectDeviceType('${type}')">${DEVICE_ICONS[type] || '📦'} ${type}</button>`
+        ).join('');
+      }
+
+      function selectDeviceType(type) {
+        state.deviceType = type;
+        renderDeviceTabs();
+        renderBrands();
+      }
+
+      // ─── Rendu des marques ────────────────────────────────────
+      function renderBrands() {
+        const brands = Object.keys(CATALOG[state.deviceType] || {});
+        const html = brands.map(brand => {
+          const count = Object.keys(CATALOG[state.deviceType][brand]).length;
+          const logoUrl = BRAND_LOGOS[brand];
+          const logoHtml = logoUrl
+            ? `<img src="${logoUrl}" alt="${brand}" onerror="this.outerHTML='<span style=\\'font-family:Sora,sans-serif;font-weight:800;font-size:1.2rem;color:var(--navy);\\'>${brand}</span>'">`
+            : `<span style="font-family:Sora,sans-serif;font-weight:800;font-size:1.2rem;color:var(--navy);">${brand}</span>`;
+          return `<div class="brand-tile" onclick="selectBrand('${brand.replace(/'/g, "\\'")}')">
+            <div class="brand-tile-logo">${logoHtml}</div>
+            <div class="brand-tile-name">${brand}</div>
+            <div class="brand-tile-count">${count} modèles</div>
+          </div>`;
+        }).join('');
+        document.getElementById('brandsGrid').innerHTML = html ||
+          '<div class="empty-state">Aucune marque disponible pour ce type d\'appareil.</div>';
+      }
+
+      // ─── Sélection d'une marque ──────────────────────────────
+      function selectBrand(brand) {
+        state.brand = brand;
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        document.getElementById('step3').classList.add('hidden');
+        setStep(2);
+
+        document.getElementById('step2Title').textContent = `${brand} — Choisissez votre modèle`;
+        document.getElementById('modelSearch').value = '';
+        renderModels('');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // ─── Rendu des modèles avec recherche ────────────────────
+      function renderModels(searchQuery) {
+        const models = Object.keys(CATALOG[state.deviceType][state.brand] || {});
+        const filtered = searchQuery
+          ? models.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase()))
+          : models;
+
+        if (!filtered.length) {
+          document.getElementById('modelsGrid').innerHTML =
+            '<div class="empty-state" style="grid-column:1/-1;">Aucun modèle trouvé pour "<strong>' + searchQuery + '</strong>".</div>';
+          return;
+        }
+
+        const html = filtered.map(model => {
+          const repairs = CATALOG[state.deviceType][state.brand][model];
+          const prices = Object.values(repairs).filter(p => typeof p === 'number' && p > 0);
+          const minPrice = prices.length ? Math.min(...prices) : null;
+          const imageHtml = modelImage(model, state.deviceType, state.brand);
+
+          return `<div class="model-tile" onclick="selectModel('${model.replace(/'/g, "\\'")}')">
+            <div class="model-tile-illustration">${imageHtml}</div>
+            <div class="model-tile-info">
+              <div class="model-tile-name" title="${model}">${model}</div>
+              <div class="model-tile-prices">
+                ${minPrice ? `<span class="model-tile-from">Dès</span><span class="model-tile-min">${minPrice.toFixed(2).replace('.', ',')} €</span>` : '<span class="model-tile-from">Sur devis</span>'}
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+        document.getElementById('modelsGrid').innerHTML = html;
+      }
+
+      // Search input
+      document.getElementById('modelSearch').addEventListener('input', (e) => {
+        renderModels(e.target.value);
+      });
+
+      // ─── Sélection d'un modèle (vue fiche produit type iTelier) ─
+      function selectModel(model) {
+        state.model = model;
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step3').classList.remove('hidden');
+        setStep(3);
+
+        // Titre
+        document.getElementById('step3Title').textContent = model;
+
+        // Breadcrumb
+        document.getElementById('productBreadcrumb').innerHTML =
+          `<a href="../index.html">Accueil</a> › <a href="javascript:goStep(1)">Tarifs</a> › <a href="javascript:goStep(2)">${state.brand}</a> › <strong>${model}</strong>`;
+
+        // Galerie d'illustrations (4 vues : face/dos/profil/caméra)
+        const imageHtml = modelImage(model, state.deviceType, state.brand);
+        document.getElementById('productGalleryMain').innerHTML = imageHtml;
+
+        // 4 miniatures avec angles différents (rotations CSS)
+        const thumbsHtml = [0, 1, 2, 3].map(i =>
+          `<div class="product-gallery-thumb${i === 0 ? ' is-active' : ''}" data-view="${i}" onclick="setGalleryView(${i})">${imageHtml}</div>`
+        ).join('');
+        document.getElementById('productGalleryThumbs').innerHTML = thumbsHtml;
+
+        // Récupérer les réparations
+        const repairs = CATALOG[state.deviceType][state.brand][model] || {};
+        const entries = Object.entries(repairs);
+
+        // Pastilles de réparation
+        const pillsHtml = entries.map(([repair, price], idx) => {
+          const priceText = (typeof price === 'number' && price > 0)
+            ? `${price.toFixed(2).replace('.', ',')} €`
+            : 'Sur devis';
+          const unavailable = !(typeof price === 'number' && price > 0);
+          return `<button class="repair-pill${idx === 0 ? ' is-active' : ''}${unavailable ? ' is-unavailable' : ''}"
+            onclick="selectRepair('${repair.replace(/'/g, "\\'")}', ${typeof price === 'number' ? price : 'null'})">
+            <span class="repair-pill-name">${repair}</span>
+            <span class="repair-pill-price">${priceText}</span>
+          </button>`;
+        }).join('');
+
+        document.getElementById('repairPills').innerHTML = pillsHtml ||
+          '<p style="color:var(--muted);">Aucune réparation référencée. Contactez-nous pour un devis personnalisé.</p>';
+
+        // Sélectionne la première réparation par défaut
+        if (entries.length > 0) {
+          const [firstRepair, firstPrice] = entries[0];
+          selectRepair(firstRepair, typeof firstPrice === 'number' ? firstPrice : null);
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Sélectionne une réparation (mise à jour du prix affiché)
+      function selectRepair(repair, price) {
+        document.querySelectorAll('.repair-pill').forEach(p => {
+          p.classList.toggle('is-active', p.querySelector('.repair-pill-name').textContent === repair);
+        });
+
+        document.getElementById('selectedName').textContent = repair;
+        if (price === null || price === undefined) {
+          document.getElementById('selectedPrice').innerHTML = '<span style="color:var(--soft);">Sur devis</span>';
+        } else {
+          document.getElementById('selectedPrice').textContent = price.toFixed(2).replace('.', ',') + ' €';
+        }
+      }
+
+      // Galerie : changer la vue
+      function setGalleryView(idx) {
+        document.querySelectorAll('.product-gallery-thumb').forEach((el, i) => {
+          el.classList.toggle('is-active', i === idx);
+        });
+        // Rotation/zoom de l'illustration principale selon l'angle
+        const main = document.getElementById('productGalleryMain');
+        const rotations = ['rotate(0deg)', 'rotateY(180deg)', 'rotate(-15deg) scale(0.9)', 'rotate(15deg) scale(0.9)'];
+        main.style.transform = rotations[idx];
+      }
+
+      // ─── Navigation étapes ───────────────────────────────────
+      function goStep(step) {
+        document.getElementById('step1').classList.toggle('hidden', step !== 1);
+        document.getElementById('step2').classList.toggle('hidden', step !== 2);
+        document.getElementById('step3').classList.toggle('hidden', step !== 3);
+        setStep(step);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function setStep(active) {
+        for (let i = 1; i <= 3; i++) {
+          const dot = document.getElementById('dot' + i);
+          const lbl = document.getElementById('lbl' + i);
+          if (i < active) {
+            dot.className = 'step-dot is-done';
+            dot.textContent = '✓';
+          } else if (i === active) {
+            dot.className = 'step-dot is-active';
+            dot.textContent = i;
+          } else {
+            dot.className = 'step-dot';
+            dot.textContent = i;
+          }
+          lbl.className = i <= active ? 'step-label is-active' : 'step-label';
+        }
+      }
+
+      // ─── Init ────────────────────────────────────────────────
+      renderDeviceTabs();
+      renderBrands();
+    </script>
+  </body>
+</html>

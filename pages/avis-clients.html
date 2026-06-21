@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="../assets/logo-phonethik-real.png">
+    <title>Avis clients | Phon'Ethik Lyon</title>
+    <meta name="description" content="Découvrez les avis Google de nos clients chez Phon'Ethik Lyon. Note 4,9/5, plus de 250 avis vérifiés sur notre boutique de réparation Part-Dieu.">
+    <link rel="canonical" href="./avis-clients.html">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+      .reviews-hero {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: clamp(32px, 5vw, 56px) clamp(20px, 5vw, 64px);
+        align-items: center;
+      }
+      @media (min-width: 900px) { .reviews-hero { grid-template-columns: 1fr 1.5fr; } }
+
+      .big-score {
+        background: linear-gradient(135deg, var(--navy-pale), var(--surface));
+        border: 1.5px solid var(--navy-border);
+        border-radius: var(--radius-xl);
+        padding: 40px 28px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .big-score-num {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: 5rem;
+        font-weight: 800;
+        color: var(--navy);
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      .big-score-stars {
+        color: #f59e0b;
+        font-size: 1.8rem;
+        letter-spacing: 0.15em;
+        margin-bottom: 12px;
+      }
+      .big-score-count {
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+      }
+      .big-score-google {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: #fff;
+        border: 1.5px solid var(--line);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink);
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .big-score-google:hover { border-color: var(--navy); }
+      .big-score-google img { width: 18px; height: 18px; }
+
+      .reviews-intro h1 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 800;
+        margin-bottom: 14px;
+        letter-spacing: -0.015em;
+      }
+      .reviews-intro h1 em { color: var(--navy); font-style: normal; }
+      .reviews-intro p {
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .stat-mini {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 16px 12px;
+        text-align: center;
+        border: 1.5px solid var(--line);
+      }
+      .stat-mini-val {
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--navy);
+      }
+      .stat-mini-lbl {
+        font-size: 0.74rem;
+        color: var(--muted);
+        margin-top: 2px;
+        font-weight: 500;
+      }
+
+      /* ─── REVIEWS GRID ─── */
+      .reviews-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: clamp(32px, 5vw, 56px) clamp(20px, 5vw, 64px);
+      }
+      .reviews-filter {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .review-filter-btn {
+        padding: 8px 16px;
+        border-radius: 99px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1.5px solid var(--line);
+        background: var(--paper);
+        color: var(--muted);
+        white-space: nowrap;
+        transition: all 0.2s;
+        font-family: inherit;
+      }
+      .review-filter-btn.is-active {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      @media (min-width: 700px) { .reviews-grid { grid-template-columns: 1fr 1fr; } }
+      @media (min-width: 1100px) { .reviews-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+      .review-card {
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: all 0.2s;
+      }
+      .review-card:hover {
+        border-color: var(--navy-border);
+        box-shadow: var(--shadow);
+      }
+      .review-card-empty {
+        grid-column: 1 / -1;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .review-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .review-avatar {
+        width: 44px; height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--navy), var(--navy-light));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Sora', Inter, sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .review-meta { flex: 1; min-width: 0; }
+      .review-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--ink);
+        margin-bottom: 2px;
+      }
+      .review-date {
+        font-size: 0.74rem;
+        color: var(--soft);
+      }
+      .review-stars {
+        color: #f59e0b;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+      }
+      .review-text {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.65;
+        font-style: italic;
+      }
+      .review-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 99px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        background: var(--navy-pale);
+        color: var(--navy);
+        align-self: flex-start;
+      }
+      .review-google-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.7rem;
+        color: var(--soft);
+        margin-top: auto;
+        padding-top: 8px;
+        border-top: 1px solid var(--line);
+      }
+
+      /* ─── STATS DETAILED ─── */
+      .stats-detailed {
+        background: var(--surface);
+        border-radius: var(--radius-xl);
+        padding: clamp(28px, 4vw, 48px);
+        margin: 0 clamp(20px, 5vw, 64px);
+        max-width: 1200px;
+      }
+      @media (min-width: 1280px) {
+        .stats-detailed { margin: 0 auto; }
+      }
+      .stats-detailed h2 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      .rating-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      .rating-row {
+        display: grid;
+        grid-template-columns: 40px 1fr 50px;
+        gap: 12px;
+        align-items: center;
+        font-size: 0.88rem;
+      }
+      .rating-row-label { font-weight: 600; color: var(--ink); }
+      .rating-row-bar {
+        height: 8px;
+        background: var(--line);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .rating-row-fill {
+        height: 100%;
+        background: linear-gradient(to right, #f59e0b, #fbbf24);
+        border-radius: 99px;
+      }
+      .rating-row-count { text-align: right; color: var(--muted); font-size: 0.82rem; }
+
+      /* ─── CTA ─── */
+      .cta-section {
+        background: linear-gradient(135deg, var(--navy-dark), var(--navy), var(--navy-light));
+        color: #fff;
+        padding: clamp(40px, 6vw, 64px) clamp(20px, 5vw, 64px);
+        text-align: center;
+        margin-top: 32px;
+      }
+      .cta-section h2 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .cta-section p {
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 1rem;
+        max-width: 540px;
+        margin: 0 auto 24px;
+      }
+      .cta-section .hero-actions {
+        justify-content: center;
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="announce-bar">
+      ⭐ Note Google : 4,9/5 — <a href="https://maps.google.com/?q=Phon'Ethik+Lyon" target="_blank" rel="noopener">Voir les avis</a>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="Accueil Phon'Ethik">
+        <img src="../assets/logo-phonethik-real.png" alt="Phon'Ethik">
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+        <a href="../index.html">Accueil</a>
+        <a href="./tarifs-reparation.html">Tarifs</a>
+        <a href="./avis-clients.html" class="is-active">Avis</a>
+        <a href="./contact-horaires.html">Contact</a>
+        <a class="nav-cta" href="tel:+33951948881">09 51 94 88 81</a>
+        <div class="theme-switch" aria-label="Choix du thème">
+          <button type="button" data-theme-choice="light">Clair</button>
+          <button type="button" data-theme-choice="dark">Sombre</button>
+          <button type="button" data-theme-choice="auto">Auto</button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ─── PAGE HERO ─── -->
+    <section class="page-hero">
+      <h1>Avis <em>clients</em></h1>
+      <p>Découvrez ce que nos clients pensent de Phon'Ethik. Nous sommes fiers de notre note Google et de la confiance que vous nous accordez.</p>
+      <div class="page-badges">
+        <span class="page-badge">⭐ 4,9 / 5</span>
+        <span class="page-badge">📍 +250 avis Google</span>
+        <span class="page-badge">✓ 100% vérifiés</span>
+      </div>
+    </section>
+
+    <main>
+      <!-- ─── BIG SCORE ─── -->
+      <section class="reviews-hero">
+        <div class="big-score">
+          <div class="big-score-num google-rating-value">4,9</div>
+          <div class="big-score-stars">★★★★★</div>
+          <div class="big-score-count google-rating-count">+ de 250 avis Google</div>
+          <a href="https://maps.google.com/?q=Phon'Ethik+138+cours+Lafayette+Lyon" target="_blank" rel="noopener" class="big-score-google">
+            <span>📍</span>
+            Voir tous les avis sur Google
+          </a>
+        </div>
+
+        <div class="reviews-intro">
+          <h1>Ils nous ont fait <em>confiance</em></h1>
+          <p>Depuis l'ouverture de notre boutique au 138 cours Lafayette, plus de 250 clients nous ont laissé un avis sur Google. Voici une sélection de leurs retours sur nos réparations, notre accueil et notre service.</p>
+
+          <div class="stats-row">
+            <div class="stat-mini">
+              <div class="stat-mini-val">4,9</div>
+              <div class="stat-mini-lbl">⭐ Note moyenne</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-val">250+</div>
+              <div class="stat-mini-lbl">Avis Google</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-val">98%</div>
+              <div class="stat-mini-lbl">Recommandent</div>
+            </div>
+          </div>
+
+          <div class="hero-actions" style="margin-bottom:0;">
+            <a href="./tarifs-reparation.html" class="btn btn-primary">🔧 Voir les tarifs</a>
+            <a href="./contact-horaires.html" class="btn btn-secondary">📍 Nous trouver</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── REVIEWS GRID ─── -->
+      <section class="reviews-section">
+        <div class="section-heading">
+          <p class="eyebrow">Témoignages</p>
+          <h2>Les derniers avis</h2>
+          <p>Une sélection d'avis publics consultables sur la fiche Google de Phon'Ethik.</p>
+        </div>
+
+        <!-- Filtres -->
+        <div class="reviews-filter">
+          <button class="review-filter-btn is-active" data-filter="all">Tous</button>
+          <button class="review-filter-btn" data-filter="google">Google</button>
+        </div>
+
+        <!-- Grille avis -->
+        <div class="reviews-grid" id="googleReviews">
+          <article class="review-card" data-tags="google">
+            <div class="review-header">
+              <div class="review-avatar">DM</div>
+              <div class="review-meta">
+                <div class="review-name">Denis Maniti</div>
+                <div class="review-date">Google</div>
+              </div>
+              <div class="review-stars">★★★★★</div>
+            </div>
+            <p class="review-text">"Superbe équipe! Serviable, rapide et un excellent rapport qualité-prix."</p>
+            <a class="review-google-badge" href="https://www.google.com/search?q=Phon%27Ethik+Lyon+Avis&tbm=lcl#lkt=LocalPoiReviews" target="_blank" rel="noopener">Avis Google</a>
+          </article>
+
+          <article class="review-card" data-tags="google">
+            <div class="review-header">
+              <div class="review-avatar">G</div>
+              <div class="review-meta">
+                <div class="review-name">Avis Google</div>
+                <div class="review-date">Google</div>
+              </div>
+              <div class="review-stars">★★★★★</div>
+            </div>
+            <p class="review-text">"Rapide, professionnel et à l'écoute."</p>
+            <a class="review-google-badge" href="https://www.google.com/search?q=Phon%27Ethik+Lyon+Avis&tbm=lcl#lkt=LocalPoiReviews" target="_blank" rel="noopener">Avis Google</a>
+          </article>
+
+          <article class="review-card" data-tags="google">
+            <div class="review-header">
+              <div class="review-avatar">G</div>
+              <div class="review-meta">
+                <div class="review-name">Avis Google</div>
+                <div class="review-date">Google</div>
+              </div>
+              <div class="review-stars">★★★★★</div>
+            </div>
+            <p class="review-text">"Très bon accueil et réparation efficace."</p>
+            <a class="review-google-badge" href="https://www.google.com/search?q=Phon%27Ethik+Lyon+Avis&tbm=lcl#lkt=LocalPoiReviews" target="_blank" rel="noopener">Avis Google</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- ─── CTA ─── -->
+      <section class="cta-section">
+        <h2>Confiez-nous votre appareil</h2>
+        <p>Rejoignez nos +250 clients satisfaits. Devis gratuit, intervention rapide, garantie incluse.</p>
+        <div class="hero-actions">
+          <a href="./tarifs-reparation.html" class="btn btn-primary btn-lg">🔧 Voir les tarifs</a>
+          <a href="tel:+33951948881" class="btn btn-secondary btn-lg">📞 09 51 94 88 81</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ─── STICKY CTA ─── -->
+    <div class="sticky-cta">
+      <a href="tel:+33951948881" class="cta-tel">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        09 51 94 88 81
+      </a>
+      <a href="./tarifs-reparation.html" class="cta-rdv">🔧 Tarifs</a>
+    </div>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Phon'Ethik</strong>
+        <p>138 cours Lafayette, 69003 Lyon</p>
+      </div>
+      <nav>
+        <a href="../index.html">Accueil</a>
+        <a href="./tarifs-reparation.html">Tarifs</a>
+        <a href="./contact-horaires.html">Contact</a>
+        <a href="./mentions-legales.html">Mentions légales</a>
+      </nav>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="../google-place-config.js"></script>
+    <script src="../google-place.js"></script>
+    <script>
+      // Filtres avis
+      const filterBtns = document.querySelectorAll('.review-filter-btn');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          const filter = btn.dataset.filter;
+          document.querySelectorAll('.review-card').forEach(card => {
+            const tags = (card.dataset.tags || '').split(',');
+            card.style.display = (filter === 'all' || tags.includes(filter)) ? '' : 'none';
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

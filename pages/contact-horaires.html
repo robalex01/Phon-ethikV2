@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="../assets/logo-phonethik-real.png">
+    <title>Contact & Horaires | Phon'Ethik Lyon Part-Dieu</title>
+    <meta name="description" content="Contactez Phon'Ethik au 138 cours Lafayette, Lyon 3. Téléphone, formulaire, horaires d'ouverture et carte d'accès Part-Dieu.">
+    <link rel="canonical" href="./contact-horaires.html">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+      /* Styles spécifiques contact */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: clamp(32px, 5vw, 56px) clamp(20px, 5vw, 64px);
+      }
+      @media (min-width: 900px) {
+        .contact-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      }
+      .contact-card {
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        box-shadow: var(--shadow-sm);
+      }
+      .contact-card h2 {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: var(--ink);
+      }
+      .contact-card > p {
+        color: var(--muted);
+        margin-bottom: 20px;
+        font-size: 0.94rem;
+      }
+      .contact-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .contact-row:last-of-type { border-bottom: none; padding-bottom: 0; }
+      .contact-icon {
+        width: 42px; height: 42px;
+        border-radius: 10px;
+        background: var(--navy-pale);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .contact-info { flex: 1; min-width: 0; }
+      .contact-info-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--soft);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+      .contact-info-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1.5;
+      }
+      .contact-info-value a { color: var(--navy); }
+      .contact-info-value a:hover { text-decoration: underline; }
+
+      .hours-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .hours-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.92rem;
+      }
+      .hours-list li:last-child { border-bottom: none; }
+      .hours-list .day { font-weight: 600; color: var(--ink); }
+      .hours-list .hours { color: var(--muted); }
+      .hours-list .closed { color: var(--red); font-weight: 600; }
+      .hours-list .today { background: var(--navy-pale); margin: 0 -14px; padding: 10px 14px; border-radius: 8px; border-bottom: none; }
+      .hours-list .today .day { color: var(--navy); }
+
+      /* Map */
+      .map-wrap {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1.5px solid var(--line);
+        background: var(--navy-pale);
+        position: relative;
+      }
+      .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+      .map-placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: linear-gradient(135deg, var(--navy-pale), var(--surface-2));
+      }
+
+      /* Formulaire */
+      .contact-form { display: flex; flex-direction: column; gap: 16px; }
+      .form-row { display: flex; flex-direction: column; gap: 6px; }
+      .form-row label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .form-row input,
+      .form-row textarea,
+      .form-row select {
+        font-family: inherit;
+        font-size: 0.94rem;
+        padding: 12px 14px;
+        border: 1.5px solid var(--line);
+        border-radius: 10px;
+        background: var(--paper);
+        color: var(--ink);
+        transition: border-color 0.2s;
+      }
+      .form-row input:focus,
+      .form-row textarea:focus,
+      .form-row select:focus {
+        outline: none;
+        border-color: var(--navy);
+      }
+      .form-row textarea { resize: vertical; min-height: 120px; }
+      .form-row-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+      @media (min-width: 600px) {
+        .form-row-2 { grid-template-columns: 1fr 1fr; }
+      }
+      .form-info {
+        background: var(--navy-pale);
+        border: 1px solid var(--navy-border);
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 0.82rem;
+        color: var(--navy);
+      }
+
+      /* Quick actions */
+      .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .quick-action {
+        background: var(--paper);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius);
+        padding: 18px 14px;
+        text-align: center;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .quick-action:hover {
+        border-color: var(--navy);
+        background: var(--navy-pale);
+      }
+      .quick-action-icon { font-size: 1.6rem; }
+      .quick-action-title { font-size: 0.85rem; font-weight: 700; }
+      .quick-action-sub { font-size: 0.74rem; color: var(--muted); }
+
+      .access-tips {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 18px;
+        margin-top: 20px;
+      }
+      .access-tips h3 {
+        font-size: 0.92rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--ink);
+      }
+      .access-tips ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .access-tips li {
+        font-size: 0.86rem;
+        color: var(--muted);
+        padding-left: 22px;
+        position: relative;
+      }
+      .access-tips li::before {
+        content: "🚇";
+        position: absolute;
+        left: 0;
+      }
+      .access-tips li.bus::before { content: "🚌"; }
+      .access-tips li.car::before { content: "🚗"; }
+      .access-tips li.bike::before { content: "🚲"; }
+    </style>
+  </head>
+  <body>
+    <div class="announce-bar">
+      📍 Ouvert Lun–Ven 10h–19h · Sam fermé · <a href="tel:+33951948881">09 51 94 88 81</a> — appel gratuit
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="Accueil Phon'Ethik">
+        <img src="../assets/logo-phonethik-real.png" alt="Phon'Ethik">
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+        <a href="../index.html">Accueil</a>
+        <a href="./tarifs-reparation.html">Tarifs</a>
+        <a href="./avis-clients.html">Avis</a>
+        <a href="./contact-horaires.html" class="is-active">Contact</a>
+        <a class="nav-cta" href="tel:+33951948881">09 51 94 88 81</a>
+        <div class="theme-switch" aria-label="Choix du thème">
+          <button type="button" data-theme-choice="light">Clair</button>
+          <button type="button" data-theme-choice="dark">Sombre</button>
+          <button type="button" data-theme-choice="auto">Auto</button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ─── PAGE HERO ─── -->
+    <section class="page-hero">
+      <h1>Nous <em>contacter</em></h1>
+      <p>Boutique Phon'Ethik au cœur de Lyon Part-Dieu. Venez nous rencontrer ou contactez-nous directement.</p>
+      <div class="page-badges">
+        <span class="page-badge">📞 09 51 94 88 81</span>
+        <span class="page-badge">📍 138 cours Lafayette</span>
+        <span class="page-badge">🕐 Lun–Ven 10h–19h</span>
+      </div>
+    </section>
+
+    <main>
+      <div class="contact-grid">
+
+        <!-- ─── COLONNE GAUCHE : INFOS ─── -->
+        <div>
+
+          <!-- Actions rapides -->
+          <div class="quick-actions">
+            <a href="tel:+33951948881" class="quick-action">
+              <span class="quick-action-icon">📞</span>
+              <span class="quick-action-title">Appeler</span>
+              <span class="quick-action-sub">09 51 94 88 81</span>
+            </a>
+            <a href="https://maps.google.com/?q=138+Cours+Lafayette+Lyon" target="_blank" rel="noopener" class="quick-action">
+              <span class="quick-action-icon">🗺️</span>
+              <span class="quick-action-title">Itinéraire</span>
+              <span class="quick-action-sub">Google Maps</span>
+            </a>
+          </div>
+
+          <!-- Card infos -->
+          <div class="contact-card" style="margin-bottom:20px;">
+            <h2>📍 Notre boutique</h2>
+            <p>Retrouvez-nous au cœur de Lyon Part-Dieu, à 5 minutes à pied de la gare.</p>
+
+            <div class="contact-row">
+              <div class="contact-icon">📍</div>
+              <div class="contact-info">
+                <div class="contact-info-label">Adresse</div>
+                <div class="contact-info-value">
+                  138 cours Lafayette<br>
+                  69003 Lyon
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-row">
+              <div class="contact-icon">📞</div>
+              <div class="contact-info">
+                <div class="contact-info-label">Téléphone</div>
+                <div class="contact-info-value">
+                  <a href="tel:+33951948881">09 51 94 88 81</a><br>
+                  <span style="font-size:0.78rem;color:var(--soft);font-weight:500;">Appel gratuit · numéro non surtaxé</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-row">
+              <div class="contact-icon">✉️</div>
+              <div class="contact-info">
+                <div class="contact-info-label">Email</div>
+                <div class="contact-info-value">
+                  <a href="mailto:phonethik@gmail.com">phonethik@gmail.com</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-row">
+              <div class="contact-icon">💬</div>
+              <div class="contact-info">
+                <div class="contact-info-label">Réseaux sociaux</div>
+                <div class="contact-info-value" style="display:flex;gap:14px;flex-wrap:wrap;">
+                  <a href="https://www.facebook.com/phonethik/" target="_blank" rel="noopener">Facebook</a>
+                  <a href="https://www.instagram.com/phonethik/" target="_blank" rel="noopener">Instagram</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card horaires -->
+          <div class="contact-card" style="margin-bottom:20px;">
+            <h2>🕐 Horaires d'ouverture</h2>
+            <p>Nous vous accueillons directement pendant les heures d'ouverture.</p>
+
+            <ul class="hours-list" id="googleHours">
+              <li><span class="day">Lundi</span><span class="hours">10h00 – 19h00</span></li>
+              <li><span class="day">Mardi</span><span class="hours">10h00 – 19h00</span></li>
+              <li><span class="day">Mercredi</span><span class="hours">10h00 – 19h00</span></li>
+              <li><span class="day">Jeudi</span><span class="hours">10h00 – 19h00</span></li>
+              <li><span class="day">Vendredi</span><span class="hours">10h00 – 19h00</span></li>
+              <li><span class="day">Samedi</span><span class="hours closed">Fermé</span></li>
+              <li><span class="day">Dimanche</span><span class="hours closed">Fermé</span></li>
+            </ul>
+          </div>
+
+          <!-- Accès -->
+          <div class="contact-card">
+            <h2>🚇 Comment venir</h2>
+            <p>Au cœur du 3e arrondissement de Lyon, facilement accessible en transports.</p>
+            <div class="access-tips">
+              <h3>Transports en commun</h3>
+              <ul>
+                <li><a href="https://www.tcl.fr/itineraires?to=138%20Cours%20Lafayette%2069003%20Lyon" target="_blank" rel="noopener">Métro B — station Place Guichard (5 min à pied)</a></li>
+                <li class="bus"><a href="https://www.tcl.fr/itineraires?to=138%20Cours%20Lafayette%2069003%20Lyon" target="_blank" rel="noopener">Bus C3, C7, C13 — arrêt Cours Lafayette</a></li>
+                <li class="bus"><a href="https://www.tcl.fr/itineraires?to=138%20Cours%20Lafayette%2069003%20Lyon" target="_blank" rel="noopener">Bus C26 — arrêt Garibaldi / Lafayette</a></li>
+                <li class="car">Parking Halles Paul Bocuse (200 m)</li>
+                <li class="bike">Stations Vélo'v à proximité</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── COLONNE DROITE : MAP + FORM ─── -->
+        <div>
+          <!-- Carte -->
+          <div class="map-wrap" style="margin-bottom:24px;">
+            <iframe
+              src="https://www.openstreetmap.org/export/embed.html?bbox=4.8485%2C45.7595%2C4.8585%2C45.7645&amp;layer=mapnik&amp;marker=45.762%2C4.8535"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Carte Phon'Ethik - 138 cours Lafayette Lyon">
+            </iframe>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ─── PHOTOS GOOGLE ─── -->
+      <section class="section muted">
+        <div class="section-heading">
+          <p class="eyebrow">📸 La boutique en images</p>
+          <h2>Phon'Ethik en photos</h2>
+        </div>
+        <div id="googlePhotos" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:12px;">
+          <img src="../assets/google/phonethik-google-01.jpg" alt="Façade Phon'Ethik" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);border:1.5px solid var(--line);">
+          <img src="../assets/google/phonethik-google-02.jpg" alt="Atelier de réparation" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);border:1.5px solid var(--line);">
+          <img src="../assets/google/phonethik-google-03.jpg" alt="Vitrine produits" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);border:1.5px solid var(--line);">
+          <img src="../assets/google/phonethik-google-04.jpg" alt="Accueil client" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);border:1.5px solid var(--line);">
+        </div>
+      </section>
+    </main>
+
+    <!-- ─── STICKY CTA ─── -->
+    <div class="sticky-cta">
+      <a href="tel:+33951948881" class="cta-tel">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        09 51 94 88 81
+      </a>
+      <a href="./tarifs-reparation.html" class="cta-rdv">🔧 Tarifs</a>
+    </div>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Phon'Ethik</strong>
+        <p>138 cours Lafayette, 69003 Lyon</p>
+      </div>
+      <nav>
+        <a href="../index.html">Accueil</a>
+        <a href="./tarifs-reparation.html">Tarifs</a>
+        <a href="./avis-clients.html">Avis</a>
+        <a href="./mentions-legales.html">Mentions légales</a>
+      </nav>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="../google-place-config.js"></script>
+    <script src="../google-place.js"></script>
+    <script>
+      // Mise en évidence du jour actuel dans les horaires
+      (function() {
+        const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        const today = days[new Date().getDay()];
+        document.querySelectorAll('#googleHours li').forEach(li => {
+          const dayEl = li.querySelector('.day');
+          if (dayEl && dayEl.textContent === today) {
+            li.classList.add('today');
+          }
+        });
+      })();
+
+      // Formulaire de contact (à brancher sur votre backend / service email)
+      function submitContactForm(event) {
+        event.preventDefault();
+        const form = event.target;
+        const data = new FormData(form);
+
+        // Construction du mailto avec les données
+        const subject = encodeURIComponent('[Phon\'Ethik] ' + (data.get('sujet') || 'Contact'));
+        const body = encodeURIComponent(
+          'Prénom : ' + data.get('prenom') + '\n' +
+          'Nom : ' + data.get('nom') + '\n' +
+          'Email : ' + data.get('email') + '\n' +
+          'Téléphone : ' + (data.get('telephone') || '—') + '\n' +
+          'Sujet : ' + data.get('sujet') + '\n' +
+          'Appareil : ' + (data.get('appareil') || '—') + '\n\n' +
+          'Message :\n' + data.get('message')
+        );
+        window.location.href = `mailto:phonethik@gmail.com?subject=${subject}&body=${body}`;
+      }
+    </script>
+  </body>
+</html>
