@@ -1,0 +1,11 @@
+{
+  "name": "phon-ethik-v2",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "serve -s ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
