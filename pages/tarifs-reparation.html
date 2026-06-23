@@ -775,8 +775,57 @@
           <input type="search" id="modelSearch" placeholder="Rechercher un modèle…" autocomplete="off">
         </div>
 
+        <!-- Filtres / tri -->
+        <div class="models-filters" style="margin: 18px 0 18px;">
+          <div style="display:grid; grid-template-columns: 1fr; gap: 12px;">
+            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+              <div>
+                <label for="seriesFilter" style="display:block; font-weight:800; font-size:0.78rem; color:var(--muted); margin-bottom:8px;">
+                  Type / série
+                </label>
+                <select id="seriesFilter" style="width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink); font-family:inherit; font-weight:700;">
+                  <option value="">Toutes</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="yearMin" style="display:block; font-weight:800; font-size:0.78rem; color:var(--muted); margin-bottom:8px;">
+                  Année (min)
+                </label>
+                <input id="yearMin" type="number" inputmode="numeric" placeholder="—" style="width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink); font-family:inherit; font-weight:700;" />
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+              <div>
+                <label for="yearMax" style="display:block; font-weight:800; font-size:0.78rem; color:var(--muted); margin-bottom:8px;">
+                  Année (max)
+                </label>
+                <input id="yearMax" type="number" inputmode="numeric" placeholder="—" style="width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink); font-family:inherit; font-weight:700;" />
+              </div>
+
+              <div>
+                <label for="sortModels" style="display:block; font-weight:800; font-size:0.78rem; color:var(--muted); margin-bottom:8px;">
+                  Trier par
+                </label>
+                <select id="sortModels" style="width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink); font-family:inherit; font-weight:700;">
+                  <option value="dateDesc">Date de sortie (récent → ancien)</option>
+                  <option value="dateAsc">Date de sortie (ancien → récent)</option>
+                  <option value="nameAsc" selected>Nom (A → Z)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+              <button type="button" class="btn btn-ghost" style="padding:10px 16px;" onclick="resetModelFilters()">Réinitialiser</button>
+              <div id="modelsCount" style="font-weight:800; color:var(--muted); font-size:0.9rem;">— modèles</div>
+            </div>
+          </div>
+        </div>
+
         <div class="models-grid" id="modelsGrid"></div>
       </section>
+
 
       <!-- ─── ÉTAPE 3 : MODULE FICHE PRODUIT (style iTelier) ─── -->
       <section id="step3" class="wizard hidden">
@@ -1087,12 +1136,64 @@
         { test: /Pixel 9/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-9-face-dos-noir-smartphone-reparation-itelier-lyon.webp?v=1752856225&width=1000" }
       ];
 
-      function realPhoneImage(modelName, brand) {
+      const ITELIER_BRAND_SLUGS = {
+        'Apple': 'iphone',
+        'Samsung': 'samsung-galaxy',
+        'Google Pixel': 'google-pixel',
+        'Xiaomi': 'xiaomi',
+        'OnePlus': 'oneplus',
+        'Oppo': 'oppo',
+        'Huawei': 'huawei',
+        'Honor': 'honor',
+        // Marques iTelier (au maximum)
+        'Microsoft': 'microsoft',
+        'Nintendo': 'nintendo',
+        'Autres': 'autres',
+      };
+
+      function itelierSlugify(value) {
+        return value
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9]+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '')
+          .toLowerCase();
+      }
+
+      function buildItilierImageUrl(modelName, brand) {
+        const brandSlug = ITELIER_BRAND_SLUGS[brand] || itelierSlugify(brand);
+        let modelSlug = itelierSlugify(modelName);
+
+        if (brand === 'Samsung') {
+          modelSlug = modelSlug.replace(/^galaxy-/, '');
+        } else if (brand === 'Google Pixel') {
+          modelSlug = modelSlug.replace(/^pixel-/, '');
+        } else if (brand === 'Apple') {
+          modelSlug = modelSlug.replace(/^iphone-/, '');
+        }
+
+        if (!modelSlug) return null;
+
+        const suffix = brand === 'Samsung'
+          ? '-reparation-itelier-lyon.webp'
+          : '-face-dos-reparation-itelier-lyon.webp';
+
+        return `https://www.itelier.fr/cdn/shop/files/${brandSlug}-${modelSlug}${suffix}?width=1000`;
+      }
+
+      function realPhoneImage(modelName, brand, deviceType = 'Smartphone') {
+        // 1) Override précis (quand on a une URL déjà référencée)
         const match = REAL_PHONE_IMAGES.find(item =>
           (!item.brand || item.brand === brand) && item.test.test(modelName)
         );
         if (match) return match.url;
 
+        // 2) Tentative iTelier “générée” (slug + suffix) pour maximiser la couverture
+        //    Même si ça échoue pour certains modèles, on retombe au onerror -> local/SVG.
+        const generatedUrl = buildItilierImageUrl(modelName, brand);
+        if (generatedUrl) return generatedUrl;
+
+        // 3) Local fallback
         const localMatch = LOCAL_PHONE_IMAGES.find(item =>
           item.brand === brand && item.test.test(modelName)
         );
@@ -1101,11 +1202,20 @@
 
       // Retourne une <img> avec vraie image produit OU un SVG inline en fallback
       function modelImage(modelName, deviceType, brand) {
-        const photoUrl = realPhoneImage(modelName, brand);
+        const photoUrl = realPhoneImage(modelName, brand, deviceType);
+        const localMatch = LOCAL_PHONE_IMAGES.find(item =>
+          item.brand === brand && item.test.test(modelName)
+        );
+        const localUrl = localMatch ? localMatch.url : null;
+
         if (photoUrl) {
+          if (localUrl) {
+            return `<img src="${photoUrl}" alt="${modelName}" loading="lazy" onerror="this.onerror=null;this.src='${localUrl}'" />`;
+          }
           const fallback = encodeURIComponent(modelSVG(modelName, deviceType, brand).replace(/\n/g, ''));
           return `<img src="${photoUrl}" alt="${modelName}" loading="lazy" onerror="this.outerHTML=decodeURIComponent('${fallback}')" />`;
         }
+
         return modelSVG(modelName, deviceType, brand);
       }
 
@@ -1181,25 +1291,196 @@
         setStep(2);
 
         document.getElementById('step2Title').textContent = `${brand} — Choisissez votre modèle`;
+
+        // reset UI
         document.getElementById('modelSearch').value = '';
+        if (document.getElementById('seriesFilter')) document.getElementById('seriesFilter').value = '';
+        if (document.getElementById('yearMin')) document.getElementById('yearMin').value = '';
+        if (document.getElementById('yearMax')) document.getElementById('yearMax').value = '';
+        if (document.getElementById('sortModels')) document.getElementById('sortModels').value = 'nameAsc';
+
+        // rebuild series options for this brand
+        const models = Object.keys(CATALOG[state.deviceType][state.brand] || {});
+        const seriesSet = new Set(models.map((m) => inferSeries(m)));
+        const seriesSel = document.getElementById('seriesFilter');
+        if (seriesSel) {
+          const all = ['Toutes', ...Array.from(seriesSet).sort((a, b) => a.localeCompare(b, 'fr'))];
+          seriesSel.innerHTML = all.map((s) => {
+            if (s === 'Toutes') return `<option value="">Toutes</option>`;
+            return `<option value="${s}">${s}</option>`;
+          }).join('');
+        }
+
         renderModels('');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
+
       // ─── Rendu des modèles avec recherche ────────────────────
+      function inferReleaseYear(modelName) {
+        const name = String(modelName || '');
+
+        // iPhone: "iPhone 15", "iPhone 15 Pro", "iPhone SE 2022"
+        let m = name.match(/\b(20\d{2})\b/);
+        if (m) return Number(m[1]);
+
+        // Galaxy S/A/Z/Note: "S23", "A54", "Z Fold6", "Note 20"
+        m = name.match(/\b(S|A|Z)\s?(\d{2,4})\b/i);
+        if (m) {
+          const digits = m[2];
+          if (digits.length === 2) return 2000 + Number(digits);
+          if (digits.length === 4) return Number(digits);
+        }
+
+        // Note: "Note 10", "Note 20 Ultra"
+        m = name.match(/\bNote\s?(\d{2,4})\b/i);
+        if (m) {
+          const digits = m[1];
+          if (digits.length === 2) return 2000 + Number(digits);
+          if (digits.length === 4) return Number(digits);
+        }
+
+        // Pixel: "Pixel 8", "Pixel 8a", "Pixel 9 Pro"
+        m = name.match(/\bPixel\s?(\d{2,4})/i);
+        if (m) {
+          const digits = m[1];
+          if (digits.length === 2) return 2000 + Number(digits);
+          if (digits.length === 4) return Number(digits);
+        }
+
+        // Xiaomi/Redmi/Poco: heuristique sur les nombres (très imparfait)
+        m = name.match(/\b(\d{2,4})\b/);
+        if (m) {
+          const digits = m[1];
+          if (digits.length === 2) return 2000 + Number(digits);
+          if (digits.length === 4) return Number(digits);
+        }
+
+        return null;
+      }
+
+      function inferSeries(modelName) {
+        const name = String(modelName || '');
+        const lower = name.toLowerCase();
+
+        // Samsung
+        if (/(galaxy\s*)?z\s?(fold|flip)/i.test(name) || /galaxy\s?z/i.test(lower)) return 'Galaxy Z';
+        if (/galaxy\s?s\b/i.test(name) || /\bS\d{2,4}\b/i.test(name)) return 'Galaxy S';
+        if (/galaxy\s?a\b/i.test(name) || /\bA\d{2,4}\b/i.test(name)) return 'Galaxy A';
+        if (/galaxy\s?note/i.test(lower) || /\bnote\b/i.test(name)) return 'Galaxy Note';
+        if (/galaxy\s?m/i.test(lower)) return 'Galaxy M';
+
+        // Apple
+        if (/iphone\s?se/i.test(lower)) return 'iPhone SE';
+        if (/iphone\s?pro\b/i.test(lower) || /pro max/i.test(lower) || /ultra/i.test(lower)) return 'iPhone Pro';
+        if (/iphone/i.test(lower)) return 'iPhone';
+
+        // Google
+        if (/pixel/i.test(lower)) return 'Pixel';
+
+        // Xiaomi / Redmi / Poco
+        if (/redmi/i.test(lower)) return 'Redmi';
+        if (/poco/i.test(lower)) return 'Poco';
+        if (/xiaomi/i.test(lower)) return 'Xiaomi';
+
+        // OnePlus
+        if (/oneplus/i.test(lower)) return 'OnePlus';
+
+        // Huawei / Honor / Oppo (fallback)
+        if (/huawei/i.test(lower)) return 'Huawei';
+        if (/honor/i.test(lower)) return 'Honor';
+        if (/oppo/i.test(lower)) return 'Oppo';
+
+        return 'Autres';
+      }
+
+      function getCurrentModelFilters() {
+        const series = document.getElementById('seriesFilter')?.value || '';
+        const yearMinRaw = document.getElementById('yearMin')?.value;
+        const yearMaxRaw = document.getElementById('yearMax')?.value;
+
+        const yearMin = yearMinRaw ? Number(yearMinRaw) : null;
+        const yearMax = yearMaxRaw ? Number(yearMaxRaw) : null;
+
+        const sort = document.getElementById('sortModels')?.value || 'nameAsc';
+
+        return { series, yearMin, yearMax, sort };
+      }
+
+      function resetModelFilters() {
+        const seriesSel = document.getElementById('seriesFilter');
+        const yearMin = document.getElementById('yearMin');
+        const yearMax = document.getElementById('yearMax');
+        const sortSel = document.getElementById('sortModels');
+
+        if (seriesSel) seriesSel.value = '';
+        if (yearMin) yearMin.value = '';
+        if (yearMax) yearMax.value = '';
+        if (sortSel) sortSel.value = 'nameAsc';
+
+        const searchInput = document.getElementById('modelSearch');
+        renderModels(searchInput ? searchInput.value : '');
+      }
+
       function renderModels(searchQuery) {
         const models = Object.keys(CATALOG[state.deviceType][state.brand] || {});
-        const filtered = searchQuery
-          ? models.filter(m => m.toLowerCase().includes(searchQuery.toLowerCase()))
-          : models;
+
+        const { series: seriesFilter, yearMin, yearMax, sort } = getCurrentModelFilters();
+
+        const search = (searchQuery || '').toLowerCase();
+
+        const enriched = models.map((m) => {
+          const year = inferReleaseYear(m);
+          const series = inferSeries(m);
+          return { name: m, year, series };
+        });
+
+        let filtered = enriched;
+
+        // 1) Search
+        if (search) filtered = filtered.filter((x) => x.name.toLowerCase().includes(search));
+
+        // 2) Series
+        if (seriesFilter) filtered = filtered.filter((x) => x.series === seriesFilter);
+
+        // 3) Year range (sur année déduite ; si année null => exclu des filtres)
+        if (yearMin !== null && yearMin !== undefined && yearMin !== '' ) {
+          filtered = filtered.filter((x) => typeof x.year === 'number' && x.year >= yearMin);
+        }
+        if (yearMax !== null && yearMax !== undefined && yearMax !== '' ) {
+          filtered = filtered.filter((x) => typeof x.year === 'number' && x.year <= yearMax);
+        }
+
+        // Counter
+        const modelsCount = document.getElementById('modelsCount');
+        if (modelsCount) modelsCount.textContent = `${filtered.length} modèles`;
 
         if (!filtered.length) {
           document.getElementById('modelsGrid').innerHTML =
-            '<div class="empty-state" style="grid-column:1/-1;">Aucun modèle trouvé pour "<strong>' + searchQuery + '</strong>".</div>';
+            '<div class="empty-state" style="grid-column:1/-1;">Aucun modèle trouvé.</div>';
           return;
         }
 
-        const html = filtered.map(model => {
+        // Tri
+        filtered.sort((a, b) => {
+          if (sort === 'dateDesc') {
+            const ay = (typeof a.year === 'number') ? a.year : -Infinity;
+            const by = (typeof b.year === 'number') ? b.year : -Infinity;
+            if (by !== ay) return by - ay;
+            return a.name.localeCompare(b.name, 'fr');
+          }
+          if (sort === 'dateAsc') {
+            const ay = (typeof a.year === 'number') ? a.year : Infinity;
+            const by = (typeof b.year === 'number') ? b.year : Infinity;
+            if (ay !== by) return ay - by;
+            return a.name.localeCompare(b.name, 'fr');
+          }
+          // nameAsc (default)
+          return a.name.localeCompare(b.name, 'fr');
+        });
+
+        const html = filtered.map((x) => {
+          const model = x.name;
           const repairs = CATALOG[state.deviceType][state.brand][model];
           const prices = Object.values(repairs).filter(p => typeof p === 'number' && p > 0);
           const minPrice = prices.length ? Math.min(...prices) : null;
@@ -1211,10 +1492,12 @@
               <div class="model-tile-name" title="${model}">${model}</div>
               <div class="model-tile-prices">
                 ${minPrice ? `<span class="model-tile-from">Dès</span><span class="model-tile-min">${minPrice.toFixed(2).replace('.', ',')} €</span>` : '<span class="model-tile-from">Sur devis</span>'}
+                ${typeof x.year === 'number' ? `<span style="width:100%; font-size:0.7rem; color:var(--soft); font-weight:700; margin-top:4px;">Année ≈ ${x.year}</span>` : ''}
               </div>
             </div>
           </div>`;
         }).join('');
+
         document.getElementById('modelsGrid').innerHTML = html;
       }
 
@@ -1222,6 +1505,13 @@
       document.getElementById('modelSearch').addEventListener('input', (e) => {
         renderModels(e.target.value);
       });
+
+      // Filters input
+      document.getElementById('seriesFilter').addEventListener('change', () => renderModels(document.getElementById('modelSearch').value));
+      document.getElementById('yearMin').addEventListener('input', () => renderModels(document.getElementById('modelSearch').value));
+      document.getElementById('yearMax').addEventListener('input', () => renderModels(document.getElementById('modelSearch').value));
+      document.getElementById('sortModels').addEventListener('change', () => renderModels(document.getElementById('modelSearch').value));
+
 
       // ─── Sélection d'un modèle (vue fiche produit type iTelier) ─
       function selectModel(model) {
