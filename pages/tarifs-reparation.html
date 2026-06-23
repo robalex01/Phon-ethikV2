@@ -200,41 +200,44 @@
 
       /* Repair list */
       .repair-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 12px;
       }
       .repair-row {
         background: var(--paper);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        padding: 14px 18px;
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 18px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
+        gap: 12px;
         transition: all 0.2s;
+        min-height: 72px;
       }
       .repair-row:hover {
         border-color: var(--navy);
+        transform: translateY(-1px);
         box-shadow: var(--shadow-sm);
       }
       .repair-row-name {
-        font-weight: 600;
         font-size: 0.9rem;
+        font-weight: 600;
         color: var(--ink);
+        line-height: 1.3;
       }
       .repair-row-price {
         font-family: 'Sora', Inter, sans-serif;
         font-weight: 800;
-        font-size: 1.05rem;
+        font-size: 1rem;
         color: var(--navy);
         white-space: nowrap;
       }
       .repair-row-price.unavailable {
         color: var(--soft);
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
       }
 
       .empty-state {
@@ -251,33 +254,94 @@
       .product-page {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 32px;
-        margin-bottom: 40px;
+        gap: 22px;
+        margin-bottom: 32px;
       }
       @media (min-width: 900px) {
-        .product-page { grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+        .product-page { grid-template-columns: minmax(280px, 1fr) minmax(300px, 1fr); gap: 28px; align-items: start; }
       }
+
+      .product-gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 520px;
+        margin-inline: auto;
+      }
+      .product-gallery-main {
+        background: linear-gradient(135deg, var(--surface), var(--surface-2));
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        min-height: 260px;
+        max-height: 320px;
+        transition: transform 0.4s ease;
+      }
+      .product-gallery-main svg,
+      .product-gallery-main img {
+        width: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 18px 32px rgba(30, 58, 95, 0.22));
+      }
+      .product-gallery-thumbs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .product-gallery-thumb {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        aspect-ratio: 1 / 1;
+        padding: 8px;
+        cursor: pointer;
+        transition: border-color 0.2s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .product-gallery-thumb:hover { transform: translateY(-1px); }
+      .product-gallery-thumb svg,
+      .product-gallery-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0.75;
+      }
+      .product-gallery-thumb.is-active {
+        border-color: var(--navy);
+      }
+      .product-gallery-thumb.is-active svg,
+      .product-gallery-thumb.is-active img { opacity: 1; }
 
       /* ─── GALERIE ─── */
       .product-gallery {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        max-width: 520px;
+        margin-inline: auto;
       }
       .product-gallery-main {
         background: linear-gradient(135deg, var(--surface), var(--surface-2));
         border-radius: var(--radius-lg);
-        aspect-ratio: 1 / 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 60px;
+        padding: 30px;
+        min-height: 320px;
+        max-height: 420px;
         transition: transform 0.4s ease;
       }
       .product-gallery-main svg,
       .product-gallery-main img {
-        width: 100%;
-        height: 100%;
+        width: auto;
+        max-width: 100%;
+        max-height: 100%;
         object-fit: contain;
         filter: drop-shadow(0 16px 32px rgba(30, 58, 95, 0.25));
       }
@@ -291,7 +355,7 @@
         border: 2px solid var(--line);
         border-radius: var(--radius-sm);
         aspect-ratio: 1 / 1;
-        padding: 12px;
+        padding: 10px;
         cursor: pointer;
         transition: border-color 0.2s;
         display: flex;
@@ -316,6 +380,32 @@
       .product-gallery-thumb:nth-child(3) img { transform: rotate(-15deg) scale(0.85); }
       .product-gallery-thumb:nth-child(4) svg,
       .product-gallery-thumb:nth-child(4) img { transform: rotate(15deg) scale(0.85); }
+
+      .product-selected {
+        background: var(--surface);
+        border: 1.5px solid var(--line);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        margin: 24px 0 18px;
+      }
+      .product-selected-name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      .product-selected-price {
+        font-family: 'Sora', Inter, sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 6px;
+      }
+      .product-selected-note {
+        font-size: 0.92rem;
+        color: var(--soft);
+        margin: 0;
+      }
 
       /* ─── INFOS PRODUIT ─── */
       .product-info { padding: 0; }
@@ -382,54 +472,62 @@
         font-weight: 700;
         font-size: 0.95rem;
         color: var(--ink);
-        margin-bottom: 12px;
+        margin-bottom: 10px;
       }
 
-      /* ─── PASTILLES RÉPARATIONS ─── */
-      .repair-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
+      /* ─── LISTE RÉPARATIONS ─── */
+      .repair-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
         margin-bottom: 20px;
       }
-      .repair-pill {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-        padding: 10px 14px;
-        background: var(--paper);
-        border: 1.5px solid var(--line);
-        border-radius: var(--radius);
+      .repair-row {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: calc(var(--radius) * 1);
+        padding: 12px 14px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 10px;
         cursor: pointer;
+        transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
         font-family: inherit;
-        transition: all 0.2s;
         text-align: left;
-        min-width: 130px;
+        min-height: 62px;
       }
-      .repair-pill:hover {
-        border-color: var(--navy);
+      .repair-row:hover {
         transform: translateY(-1px);
+        border-color: var(--navy);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
       }
-      .repair-pill.is-active {
-        background: var(--navy-pale);
+      .repair-row.is-active {
+        background: rgba(66, 103, 179, 0.09);
         border-color: var(--navy);
       }
-      .repair-pill-name {
-        font-size: 0.82rem;
-        font-weight: 600;
+      .repair-row-name {
+        font-size: 0.9rem;
+        font-weight: 700;
         color: var(--ink);
-        line-height: 1.3;
+        line-height: 1.2;
       }
-      .repair-pill.is-active .repair-pill-name { color: var(--navy); }
-      .repair-pill-price {
+      .repair-row.is-active .repair-row-name { color: var(--navy); }
+      .repair-row-price {
         font-family: 'Sora', Inter, sans-serif;
         font-weight: 700;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         color: var(--navy);
+        white-space: nowrap;
       }
-      .repair-pill.is-unavailable { opacity: 0.6; }
-      .repair-pill.is-unavailable .repair-pill-price { color: var(--soft); }
+      .repair-row.is-unavailable { opacity: 0.7; }
+      .repair-row.is-unavailable .repair-row-price {
+        color: var(--soft);
+        font-weight: 700;
+      }
+      .repair-row.is-unavailable { opacity: 0.6; }
+      .repair-row.is-unavailable .repair-row-price { color: var(--soft); }
 
       /* ─── PRIX SÉLECTIONNÉ ─── */
       .product-selected {
@@ -701,21 +799,8 @@
               Retrouvez-nous à Lyon dans notre boutique du <strong>138 cours Lafayette</strong>, pendant les horaires d'ouverture.
             </p>
 
-            <div class="product-badges">
-              <div class="product-badge"><span>🔍</span><div><strong>Diagnostic</strong><br>& devis gratuit</div></div>
-              <div class="product-badge"><span>🛡️</span><div><strong>Garantie</strong><br>12 mois incluse</div></div>
-              <div class="product-badge"><span>⚡</span><div><strong>Service</strong><br>rapide</div></div>
-              <div class="product-badge"><span>💳</span><div><strong>Paiement</strong><br>au succès</div></div>
-            </div>
-
             <div class="product-section-label">Réparations :</div>
-            <div class="repair-pills" id="repairPills"></div>
-
-            <div class="product-selected" id="productSelected">
-              <div class="product-selected-name" id="selectedName">Sélectionnez une réparation</div>
-              <div class="product-selected-price" id="selectedPrice">—</div>
-              <p class="product-selected-note">Pièce, main-d'œuvre et taxes incluses.</p>
-            </div>
+            <div class="repair-list" id="repairPills"></div>
 
             <div class="product-ctas">
               <a href="tel:+33951948881" class="btn btn-primary btn-lg btn-full">📞 Appeler 09 51 94 88 81</a>
@@ -731,23 +816,6 @@
         </div>
 
         <!-- Offres spéciales -->
-        <div class="offers-section">
-          <h2>🎁 Profitez de nos offres</h2>
-          <p class="offers-sub">Ne passez pas à côté de nos remises !</p>
-          <div class="offers-grid">
-            <div class="offer-card">
-              <div class="offer-percent">-50%</div>
-              <h3>sur la 2ème réparation</h3>
-              <p>Offre de <strong>-50%</strong> sur la seconde réparation (la moins chère), valable suite à une première réparation sur le même appareil effectuée et facturée au même moment. <em>Offre non cumulable.</em></p>
-            </div>
-            <div class="offer-card">
-              <div class="offer-percent">-30%</div>
-              <h3>sur nos accessoires</h3>
-              <p>Offre de <strong>-30%</strong> sur notre catalogue d'accessoires, valable suite à une réparation, à l'achat d'un reconditionné ou sur le second achat d'un accessoire. <em>Offre non cumulable.</em></p>
-            </div>
-          </div>
-        </div>
-
         <!-- FAQ -->
         <div class="product-faq">
           <h2>❓ Questions fréquentes</h2>
@@ -901,21 +969,128 @@
         return phoneSVG(color);
       }
 
+      const LOCAL_PHONE_IMAGES = [
+        { test: /iPhone 13 Pro Max|iPhone 13 Pro|iPhone 13 Mini|iPhone 13/i, brand: "Apple", url: "../img_telephone/Apple/iphone-13-128-go-noir-minuit-reconditionne.webp" },
+        { test: /iPhone 12 Pro Max|iPhone 12 Pro|iPhone 12 Mini|iPhone 12/i, brand: "Apple", url: "../img_telephone/Apple/apple-iphone-12-pro-512go-graphite-reconditionne.webp" },
+        { test: /iPhone 11 Pro Max|iPhone 11 Pro|iPhone 11/i, brand: "Apple", url: "../img_telephone/Apple/iphone-11-64-go-blanc.jpg" },
+        { test: /iPhone X|iPhone XR|iPhone XS/i, brand: "Apple", url: "../img_telephone/Apple/apple-iphone-x.jpg" },
+        { test: /iPhone 8 Plus/i, brand: "Apple", url: "../img_telephone/Apple/iphone-7-plus-128-go-or.jpg" },
+        { test: /iPhone 8/i, brand: "Apple", url: "../img_telephone/Apple/iphone-8-64-go-gris-sideral-sans-touche-id-reconditionne.webp" },
+        { test: /iPhone 7/i, brand: "Apple", url: "../img_telephone/Apple/iphone-7-plus-128-go-or.jpg" },
+        { test: /iPhone 6s/i, brand: "Apple", url: "../img_telephone/Apple/Apple-iPhone-6s-32-Go-4-7-Gris-Sideral.jpg" },
+        { test: /Pixel 10 Pro/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-10-pro-.jpg" },
+        { test: /Pixel 10a|Pixel 10/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-10a.jpg" },
+        { test: /Pixel 9 Pro Fold|Pixel 9 Pro XL|Pixel 9 Pro/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-9-pro-.jpg" },
+        { test: /Pixel 9a/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-9a.jpg" },
+        { test: /Pixel 9/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-9-.jpg" },
+        { test: /Pixel 8 Pro/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-8-pro.jpg" },
+        { test: /Pixel 8a/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-8a.jpg" },
+        { test: /Pixel 8/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-8.jpg" },
+        { test: /Pixel 7 Pro/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel7-pro-new.jpg" },
+        { test: /Pixel 7/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel7-new.jpg" },
+        { test: /Pixel 6 Pro/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-6-pro.jpg" },
+        { test: /Pixel 6/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-6.jpg" },
+        { test: /Pixel 5a|Pixel 5/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-5-5g.jpg" },
+        { test: /Pixel 4a 5G|Pixel 4a/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-4a-5g.jpg" },
+        { test: /Pixel 4/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-4-r1.jpg" },
+        { test: /Pixel 3a XL|Pixel 3a/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-3a-xl-.jpg" },
+        { test: /Pixel 3/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-3-.jpg" },
+        { test: /Pixel 2/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-2.jpg" },
+        { test: /Pixel XL|Pixel/i, brand: "Google Pixel", url: "../img_telephone/Google/google-pixel-xl.jpg" },
+        { test: /Galaxy Z Flip 7|Galaxy Z Flip 6|Galaxy Z Flip 5|Galaxy Z Flip/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-zflip7-blueshadow-tabletopl30back.jpg" },
+        { test: /Galaxy Z Fold 7/i, brand: "Samsung", url: "../img_telephone/Samsung/002-galaxy-zfold7-blueshadow-openback115.jpg" },
+        { test: /Galaxy Z Fold 6/i, brand: "Samsung", url: "../img_telephone/Samsung/002-galaxy-zfold6-silvershadow-openback115.jpg" },
+        { test: /Galaxy Z Fold 5/i, brand: "Samsung", url: "../img_telephone/Samsung/002-galaxy-zfold5-icyblue-openback115.jpg" },
+        { test: /Galaxy Z Fold/i, brand: "Samsung", url: "../img_telephone/Samsung/002-galaxy-fold-product-image-silver-back115-2.jpg" },
+        { test: /Galaxy S26 Ultra|Galaxy S25 Ultra|Galaxy S24 Ultra/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-s26ultra-cobaltviolet-front-back-spen.jpg" },
+        { test: /Galaxy S25 Plus|Galaxy S24 Plus/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-s25plus-navy-front.jpg" },
+        { test: /Galaxy S25 Edge|Galaxy S24 FE|Galaxy S23 FE/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-s25edge-titaniumsilver-device-front.jpg" },
+        { test: /Galaxy S24 Plus|Galaxy S23|Galaxy S22|Galaxy S21|Galaxy S20/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-s24plus_front_lavender.jpg" },
+        { test: /Galaxy A55|Galaxy A54/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-a54-5g-amazing-lime-front.jpg" },
+        { test: /Galaxy A56|Galaxy A57|Galaxy A55/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-a55-5g-awesomeiceblue-front.jpg" },
+        { test: /Galaxy A|Galaxy M/i, brand: "Samsung", url: "../img_telephone/Samsung/010_Galaxy_A73_5G_mint_back.jpg" },
+        { test: /Galaxy Note/i, brand: "Samsung", url: "../img_telephone/Samsung/000_galaxynote10_product_images_aura_red-1.jpg" },
+        { test: /Galaxy/i, brand: "Samsung", url: "../img_telephone/Samsung/001-galaxy-s24plus_front_lavender.jpg" }
+      ];
+
       const REAL_PHONE_IMAGES = [
-        { test: /iPhone 15|iPhone 16|iPhone 17/i, url: "https://theapplewiki.com/images/applewiki/thumb/c/c6/IPhone_15_Pro.png/400px-IPhone_15_Pro.png" },
-        { test: /iPhone 14/i, url: "https://theapplewiki.com/images/applewiki/thumb/d/dc/IPhone_14_Pro.png/400px-IPhone_14_Pro.png" },
-        { test: /iPhone 13|iPhone 12/i, url: "https://theapplewiki.com/images/applewiki/thumb/3/37/IPhone_13.png/400px-IPhone_13.png" },
-        { test: /iPhone 11|iPhone X|iPhone XR|iPhone XS/i, url: "https://theapplewiki.com/images/applewiki/thumb/4/47/IPhone_11.png/400px-IPhone_11.png" },
-        { test: /Galaxy S2[3-5]|Galaxy Note|Ultra/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg" },
-        { test: /Galaxy S2[0-2]/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s23-ultra-5g-1.jpg" },
-        { test: /Galaxy A|Galaxy M/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a55-1.jpg" },
-        { test: /Galaxy Z|Fold|Flip/i, brand: "Samsung", url: "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg" },
-        { test: /Redmi Note|Redmi/i, brand: "Xiaomi", url: "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-5g-1.jpg" },
-        { test: /Poco/i, brand: "Xiaomi", url: "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-5g-1.jpg" },
-        { test: /Xiaomi|Mi /i, brand: "Xiaomi", url: "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-14-1.jpg" }
+        // Apple iTelier collection images
+        { test: /iPhone 17 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-iphone-17-pro-max-ecran-et-dos.webp?v=1758123870&width=1000" },
+        { test: /iPhone 17 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-iphone-17-pro-ecran-et-vitre-arriere.webp?v=1758124884&width=1000" },
+        { test: /iPhone 17 Air/i, url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-iphone-17-air-ecran-et-dos.webp?v=1758124195&width=1000" },
+        { test: /iPhone 17/i, url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-iphone-17-ecran-et-vitre-arriere.webp?v=1758124195&width=1000" },
+        { test: /iPhone 16 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-16-pro-max-noir-face-dos-reparation-itelier-lyon.webp?v=1752922112&width=1000" },
+        { test: /iPhone 16 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-16-pro-gold-face-dos-reparation-itelier-lyon.webp?v=1752921938&width=1000" },
+        { test: /iPhone 16 Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-16-plus-blanc-face-dos-reparation-itelier-lyon.webp?v=1752922020&width=1000" },
+        { test: /iPhone 16e/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-16e-noir-face-dos-reparation-itelier-lyon.webp?v=1752922195&width=1000" },
+        { test: /iPhone 16/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-16-vert-face-dos-reparation-itelier-lyon.webp?v=1752921855&width=1000" },
+        { test: /iPhone 15 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-15-pro-max-titane-face-dos-reparation-itelier-lyon.webp?v=1752921555&width=1000" },
+        { test: /iPhone 15 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-15-pro-bleu-face-dos-reparation-itelier-lyon.webp?v=1752921388&width=1000" },
+        { test: /iPhone 15 Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-15-plus-blanc-face-dos-reparation-itelier-lyon.webp?v=1752921302&width=1000" },
+        { test: /iPhone 15/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-15-rose-face-dos-reparation-itelier-lyon.webp?v=1752921472&width=1000" },
+        { test: /iPhone 14 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-14-pro-max-or-face-dos-reparation-itelier-lyon.webp?v=1752921142&width=1000" },
+        { test: /iPhone 14 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-14-pro-argent-face-dos-reparation-itelier-lyon.webp?v=1752920985&width=1000" },
+        { test: /iPhone 14 Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-14-plus-bleu-face-dos-reparation-itelier-lyon.webp?v=1752921064&width=1000" },
+        { test: /iPhone 14/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-14-violet-face-dos-reparation-itelier-lyon.webp?v=1752920908&width=1000" },
+        { test: /iPhone 13 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-13-pro-max-vert-face-dos-reparation-itelier-lyon.webp?v=1752920743&width=1000" },
+        { test: /iPhone 13 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-13-pro-graphite-face-dos-reparation-itelier-lyon.webp?v=1752920586&width=1000" },
+        { test: /iPhone 13 Mini/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-13-mini-blanc-face-dos-reparation-itelier-lyon.webp?v=1752920663&width=1000" },
+        { test: /iPhone 13/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-13-rose-face-dos-reparation-itelier-lyon.webp?v=1752920514&width=1000" },
+        { test: /iPhone 12 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-12-pro-max-or-face-dos-reparation-itelier-lyon.webp?v=1752920319&width=1000" },
+        { test: /iPhone 12 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-12-pro-bleu-face-dos-reparation-itelier-lyon.webp?v=1752920361&width=1000" },
+        { test: /iPhone 12 Mini/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-12-mini-violet-face-dos-reparation-ecran-batterie-itelier-lyon.webp?v=1752920183&width=1000" },
+        { test: /iPhone 12/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-12-blanc-face-dos-reparation-ecran-et-batterie-itelier-lyon.webp?v=1752920107&width=1000" },
+        { test: /iPhone 11 Pro Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-11-pro-max-vert-nuit-face-et-dos-reparation-itelier-lyon.webp?v=1752919748&width=1000" },
+        { test: /iPhone 11 Pro/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-11-pro-or-face-et-dos-reparation-ecran-et-batterie-itelier-lyon.webp?v=1752919963&width=1000" },
+        { test: /iPhone 11/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-11-blanc-face-et-dos-reparation-ecran-et-batterie-itelier-lyon.webp?v=1752919846&width=1000" },
+        { test: /iPhone XR/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-xr-corail-face-et-dos-reparation-itelier-lyon.webp?v=1752919444&width=1000" },
+        { test: /iPhone XS Max/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-xs-max-argent-face-et-dos-reparation-itelier-lyon.webp?v=1752919581&width=1000" },
+        { test: /iPhone XS/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-xs-gris-sideral-face-et-dos-reparation-itelier-lyon.webp?v=1752919513&width=1000" },
+        { test: /iPhone X/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-x-face-et-dos-verre-reparation-itelier-lyon.webp?v=1752919380&width=1000" },
+        { test: /iPhone SE 2022/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-se-2022-product-red-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752917225&width=1000" },
+        { test: /iPhone SE 2020/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-se-2020-noir-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752917379&width=1000" },
+        { test: /iPhone SE 2016/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-se-2016-gris-sideral-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752917305&width=1000" },
+        { test: /iPhone 8 Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-8-plus-blanc-vue-face-dos-inclinee-reparation-itelier-lyon.webp?v=1752919242&width=1000" },
+        { test: /iPhone 8/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-8-noir-vue-avant-arriere-inclinee-reparation-itelier-lyon.webp?v=1752919212&width=1000" },
+        { test: /iPhone 7 Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-7-plus-argent-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752919013&width=1000" },
+        { test: /iPhone 7/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-7-noir-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752918943&width=1000" },
+        { test: /iPhone 6s Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-6s-plus-argent-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752918234&width=1000" },
+        { test: /iPhone 6s/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-6s-rose-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752918334&width=1000" },
+        { test: /iPhone 6 Plus/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-6-plus-gris-sideral-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752917596&width=1000" },
+        { test: /iPhone 6/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-6-gris-sideral-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752917512&width=1000" },
+        { test: /iPhone 5s/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-5s-argent-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752916923&width=1000" },
+        { test: /iPhone 5c/i, url: "https://www.itelier.fr/cdn/shop/files/iphone-5c-bleu-vue-avant-arriere-reparation-itelier-lyon.webp?v=1752916841&width=1000" },
+        // Samsung iTelier collection images
+        { test: /Galaxy Z Fold 7/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-fold6-ecran-pliable-ouvert.webp?v=1757941636&width=1000" },
+        { test: /Galaxy Z Fold 6/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-fold6-ecran-pliable-ouvert.webp?v=1757941636&width=1000" },
+        { test: /Galaxy Z Fold 5/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-fold5-ecran-pliable-ouvert.webp?v=1757941791&width=1000" },
+        { test: /Galaxy Z Fold 4/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-fold4-ouvert-ecran-pliable.webp?v=1757942546&width=1000" },
+        { test: /Galaxy Z Fold/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-fold3-5g-ouvert-ecran-pliable.webp?v=1757942595&width=1000" },
+        { test: /Galaxy Z Flip 7/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-flip7-blueshadow-tabletopl30back.jpg?v=1757942740&width=1000" },
+        { test: /Galaxy Z Flip 6/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-flip6-ecran-pliable-ouvert.webp?v=1757941722&width=1000" },
+        { test: /Galaxy Z Flip 5/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-flip5-mint-tabletopl30back.jpg?v=1757942775&width=1000" },
+        { test: /Galaxy Z Flip|Flip/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-z-fold3-5g-ouvert-ecran-pliable.webp?v=1757942595&width=1000" },
+        { test: /Galaxy S26 Ultra|Galaxy S25 Ultra|Galaxy S24 Ultra/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg?v=1757943015&width=1000" },
+        { test: /Galaxy S25 Plus|Galaxy S24 Plus/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-s24-plus-lavender-front.jpg?v=1757943057&width=1000" },
+        { test: /Galaxy S24 FE|Galaxy S23 FE/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-s24-fe-blue-front.jpg?v=1757943089&width=1000" },
+        { test: /Galaxy S24|Galaxy S23|Galaxy S22|Galaxy S21|Galaxy S20/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-s24-plus_front_lavender.jpg?v=1757943057&width=1000" },
+        { test: /Galaxy A55|Galaxy A54/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-a54-5g-amazing-lime-front.jpg?v=1757943121&width=1000" },
+        { test: /Galaxy A|Galaxy M/i, brand: "Samsung", url: "https://www.itelier.fr/cdn/shop/files/itelier-lyon-reparation-samsung-galaxy-a73-5g-mint-back.jpg?v=1757943155&width=1000" },
+        // Google Pixel iTelier collection images
+        { test: /Pixel 9 Pro Fold/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-9-pro-fold-face-dos-reparation-itelier-lyon-smartphone-pliable.webp?v=1752855315&width=1000" },
+        { test: /Pixel Fold/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-fold-face-dos-ouvert-reparation-smartphone-itelier-lyon.webp?v=1752855744&width=1000" },
+        { test: /Pixel 9 Pro XL/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-9-pro-xl-face-dos-reparation-itelier-lyon-smartphone.webp?v=1752855910&width=1000" },
+        { test: /Pixel 9 Pro/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-9-pro-face-dos-smartphone-reparation-itelier-lyon.webp?v=1752856013&width=1000" },
+        { test: /Pixel 9a/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-9a-face-dos-bleu-reparation-smartphone-itelier-lyon.webp?v=1752856124&width=1000" },
+        { test: /Pixel 9/i, brand: "Google Pixel", url: "https://www.itelier.fr/cdn/shop/files/google-pixel-9-face-dos-noir-smartphone-reparation-itelier-lyon.webp?v=1752856225&width=1000" }
       ];
 
       function realPhoneImage(modelName, brand) {
+        const localMatch = LOCAL_PHONE_IMAGES.find(item =>
+          item.brand === brand && item.test.test(modelName)
+        );
+        if (localMatch) return localMatch.url;
+
         const match = REAL_PHONE_IMAGES.find(item =>
           (!item.brand || item.brand === brand) && item.test.test(modelName)
         );
@@ -926,8 +1101,8 @@
       function modelImage(modelName, deviceType, brand) {
         const photoUrl = realPhoneImage(modelName, brand);
         if (photoUrl) {
-          return `<img src="${photoUrl}" alt="${modelName}" loading="lazy"
-            onerror="this.outerHTML='${modelSVG(modelName, deviceType, brand).replace(/'/g, "&#39;")}'">`;
+          const fallback = encodeURIComponent(modelSVG(modelName, deviceType, brand).replace(/\n/g, ''));
+          return `<img src="${photoUrl}" alt="${modelName}" loading="lazy" onerror="this.outerHTML=decodeURIComponent('${fallback}')" />`;
         }
         return modelSVG(modelName, deviceType, brand);
       }
@@ -936,6 +1111,29 @@
       const CATALOG = (window.ITELIER_PRICE_DATA || {}).catalog || {};
       const DEVICE_TYPES = Object.keys(CATALOG);
       const DEVICE_ICONS = { Smartphone: '📱', Ordinateur: '💻', Tablette: '📋', Montre: '⌚', Accessoire: '🎮' };
+      const REPAIR_ORDER = [
+        /Écran original/i,
+        /Écran compatible/i,
+        /Batterie/i,
+        /Vitre arrière/i,
+        /Connecteur de charge/i,
+        /Caméra avant/i,
+        /Caméra arrière/i,
+        /Lentille caméra/i,
+        /Écouteur interne/i,
+        /Haut-parleur/i,
+        /Boutons/i,
+        /Antennes/i,
+        /Vibreur/i,
+        /Tiroir SIM/i
+      ];
+
+      function repairSortIndex(name) {
+        for (let i = 0; i < REPAIR_ORDER.length; i += 1) {
+          if (REPAIR_ORDER[i].test(name)) return i;
+        }
+        return REPAIR_ORDER.length;
+      }
 
       let state = { deviceType: DEVICE_TYPES[0] || 'Smartphone', brand: null, model: null };
 
@@ -1049,22 +1247,23 @@
 
         // Récupérer les réparations
         const repairs = CATALOG[state.deviceType][state.brand][model] || {};
-        const entries = Object.entries(repairs);
+        const entries = Object.entries(repairs)
+          .sort(([a], [b]) => repairSortIndex(a) - repairSortIndex(b));
 
-        // Pastilles de réparation
-        const pillsHtml = entries.map(([repair, price], idx) => {
+        // Liste de réparations
+        const listHtml = entries.map(([repair, price], idx) => {
           const priceText = (typeof price === 'number' && price > 0)
             ? `${price.toFixed(2).replace('.', ',')} €`
             : 'Sur devis';
           const unavailable = !(typeof price === 'number' && price > 0);
-          return `<button class="repair-pill${idx === 0 ? ' is-active' : ''}${unavailable ? ' is-unavailable' : ''}"
+          return `<button type="button" class="repair-row${idx === 0 ? ' is-active' : ''}${unavailable ? ' is-unavailable' : ''}"
             onclick="selectRepair('${repair.replace(/'/g, "\\'")}', ${typeof price === 'number' ? price : 'null'})">
-            <span class="repair-pill-name">${repair}</span>
-            <span class="repair-pill-price">${priceText}</span>
+            <span class="repair-row-name">${repair}</span>
+            <span class="repair-row-price${unavailable ? ' unavailable' : ''}">${priceText}</span>
           </button>`;
         }).join('');
 
-        document.getElementById('repairPills').innerHTML = pillsHtml ||
+        document.getElementById('repairPills').innerHTML = listHtml ||
           '<p style="color:var(--muted);">Aucune réparation référencée. Contactez-nous pour un devis personnalisé.</p>';
 
         // Sélectionne la première réparation par défaut
@@ -1078,8 +1277,8 @@
 
       // Sélectionne une réparation (mise à jour du prix affiché)
       function selectRepair(repair, price) {
-        document.querySelectorAll('.repair-pill').forEach(p => {
-          p.classList.toggle('is-active', p.querySelector('.repair-pill-name').textContent === repair);
+        document.querySelectorAll('.repair-row').forEach(p => {
+          p.classList.toggle('is-active', p.querySelector('.repair-row-name').textContent === repair);
         });
 
         document.getElementById('selectedName').textContent = repair;
