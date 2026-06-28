@@ -3,6 +3,8 @@
   const reviewsRoot = document.getElementById("googleReviews");
   const hoursRoot = document.getElementById("googleHours");
   const photosRoot = document.getElementById("googlePhotos");
+  let googleReviewsLoaded = false;
+  let fallbackTimer = null;
 
   // ─── Avis de secours statiques (vrais avis Google connus) ────────
   const STATIC_REVIEWS = [
@@ -44,6 +46,10 @@
 
   function renderReviewCards(reviews, googleUrl) {
     if (!reviewsRoot) return;
+    if (fallbackTimer) {
+      clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+    }
     const cards = reviews.map((r) => {
       const av = r.initials || initials(r.name || r.author_name);
       const nm = escapeHTML(r.name || r.author_name || "Avis Google");
@@ -67,9 +73,9 @@
     reviewsRoot.innerHTML = cards;
   }
 
-  function renderStaticReviews() {
+  function renderStaticReviews(force = false) {
     if (!reviewsRoot) return;
-    if (reviewsRoot.querySelector(".review-card")) return; // Already has cards
+    if (!force && reviewsRoot.querySelector(".review-card")) return; // Already has cards
     renderReviewCards(STATIC_REVIEWS, config.reviewsUrl);
   }
 
@@ -91,12 +97,29 @@
     ).join("");
   }
 
+  function renderNewHours(place) {
+    const weekdayText = place && place.regularOpeningHours && place.regularOpeningHours.weekdayDescriptions;
+    if (!hoursRoot || !Array.isArray(weekdayText)) return;
+    hoursRoot.innerHTML = weekdayText.map((line) => {
+      const parts = line.split(": ");
+      const day = parts.shift();
+      const hours = parts.join(": ");
+      const normalizedHours = hours.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const closed = /ferme|closed/i.test(normalizedHours);
+      return `<li><span class="day">${escapeHTML(day)}</span><span class="hours${closed ? " closed" : ""}">${escapeHTML(hours)}</span></li>`;
+    }).join("");
+  }
+
   // ─── API Places New (fetch) ──────────────────────────────────────
   async function tryPlacesNewAPI() {
     if (!config.apiKey || !config.placeId) return false;
     try {
-      const url = `https://places.googleapis.com/v1/places/${config.placeId}?fields=displayName,rating,userRatingCount,reviews,regularOpeningHours&languageCode=fr&key=${config.apiKey}`;
-      const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
+      const url = `https://places.googleapis.com/v1/places/${config.placeId}?languageCode=fr&key=${config.apiKey}`;
+      const res = await fetch(url, {
+        headers: {
+          "X-Goog-FieldMask": "displayName,rating,userRatingCount,reviews,regularOpeningHours"
+        }
+      });
       if (!res.ok) return false;
       const data = await res.json();
       if (data.rating) {
@@ -114,7 +137,9 @@
           author_url: r.authorAttribution && r.authorAttribution.uri || config.reviewsUrl
         }));
         if (mapped.length > 0) {
+          googleReviewsLoaded = true;
           renderReviewCards(mapped, config.reviewsUrl);
+          renderNewHours(data);
           return true;
         }
       }
@@ -131,7 +156,7 @@
       fields: ["name", "url", "rating", "user_ratings_total", "reviews", "opening_hours", "photos"]
     }, (place, status) => {
       if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
-        renderStaticReviews();
+        renderStaticReviews(true);
         return;
       }
       const rating = typeof place.rating === "number" ? place.rating.toFixed(1).replace(".", ",") : "";
@@ -139,9 +164,10 @@
       if (place.user_ratings_total) setText(".google-rating-count", `${place.user_ratings_total} avis Google`);
       const reviews = Array.isArray(place.reviews) ? place.reviews.filter(r => r.text) : [];
       if (reviews.length > 0) {
+        googleReviewsLoaded = true;
         renderReviewCards(reviews, place.url || config.reviewsUrl);
       } else {
-        renderStaticReviews();
+        renderStaticReviews(true);
       }
       renderHours(place);
       renderPhotos(place);
@@ -165,7 +191,7 @@
             fields: ["place_id"]
           }, (results, status) => {
             if (status !== google.maps.places.PlacesServiceStatus.OK || !results || !results[0]) {
-              renderStaticReviews();
+              renderStaticReviews(true);
               return;
             }
             getDetailsLegacy(service, results[0].place_id);
@@ -177,8 +203,14 @@
 
   if (!config.apiKey) {
     // No API key: show static reviews immediately
-    renderStaticReviews();
+    renderStaticReviews(true);
     return;
+  }
+
+  if (reviewsRoot) {
+    fallbackTimer = setTimeout(() => {
+      if (!googleReviewsLoaded) renderStaticReviews(true);
+    }, 4500);
   }
 
   // ─── Inject Google Maps Embed on pages that have the iframe ─────
