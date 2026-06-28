@@ -230,9 +230,15 @@
             </div>
           </div>
           <div class="contact-card map-card" aria-label="Carte du magasin">
-            <div class="map-preview">
-              <div class="map-pin" aria-hidden="true">📍</div>
-              <p>Localisé à Lyon 3, proche Part-Dieu et transports.</p>
+            <div class="map-preview" id="homeMapContainer">
+              <iframe
+                id="googleMapIframe"
+                src=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Carte Phon'Ethik - 138 cours Lafayette Lyon"
+                style="border:0;width:100%;height:100%;border-radius:var(--radius);">
+              </iframe>
             </div>
             <a class="btn btn-ghost btn-full" href="https://www.google.com/maps/place/138+Cours+Lafayette,+69003+Lyon" target="_blank" rel="noopener">Voir sur Google Maps</a>
           </div>

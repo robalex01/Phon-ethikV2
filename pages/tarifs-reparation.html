@@ -733,22 +733,14 @@
       </nav>
     </header>
 
-    <section class="page-hero">
-      <h1>Tarifs de <em>réparation</em></h1>
-      <p>Catalogue de plus de 900 modèles. Choisissez votre appareil et votre marque pour découvrir tous les prix.</p>
-      <div class="page-badges">
-        <span class="page-badge">✓ 911 modèles référencés</span>
-        <span class="page-badge">✓ Devis gratuit</span>
-        <span class="page-badge">✓ Garantie incluse</span>
-      </div>
-    </section>
+
 
     <div class="step-bar">
-      <div class="step-item"><div class="step-dot is-active" id="dot1">1</div><span class="step-label is-active" id="lbl1">Marque</span></div>
+      <div class="step-item" onclick="navigateToStep(1)"><div class="step-dot is-active" id="dot1">1</div><span class="step-label is-active" id="lbl1">Marque</span></div>
       <span class="step-sep">›</span>
-      <div class="step-item"><div class="step-dot" id="dot2">2</div><span class="step-label" id="lbl2">Modèle</span></div>
+      <div class="step-item" onclick="navigateToStep(2)"><div class="step-dot" id="dot2">2</div><span class="step-label" id="lbl2">Modèle</span></div>
       <span class="step-sep">›</span>
-      <div class="step-item"><div class="step-dot" id="dot3">3</div><span class="step-label" id="lbl3">Tarifs</span></div>
+      <div class="step-item" onclick="navigateToStep(3)"><div class="step-dot" id="dot3">3</div><span class="step-label" id="lbl3">Tarifs</span></div>
     </div>
 
     <main>
@@ -1265,7 +1257,26 @@
 
       // ─── Rendu des marques ────────────────────────────────────
       function renderBrands() {
-        const brands = Object.keys(CATALOG[state.deviceType] || {});
+        const rawBrands = Object.keys(CATALOG[state.deviceType] || {});
+        const brandOrder = ['apple', 'samsung', 'xiaomi', 'huawei', 'honor', 'oppo', 'oneplus'];
+        const brands = rawBrands.sort((a, b) => {
+          const lowerA = a.toLowerCase();
+          const lowerB = b.toLowerCase();
+          
+          if (lowerA === 'autres' || lowerA === 'autre') return 1;
+          if (lowerB === 'autres' || lowerB === 'autre') return -1;
+
+          const idxA = brandOrder.indexOf(lowerA);
+          const idxB = brandOrder.indexOf(lowerB);
+          
+          if (idxA !== -1 && idxB !== -1) {
+            return idxA - idxB;
+          }
+          if (idxA !== -1) return -1;
+          if (idxB !== -1) return 1;
+          
+          return a.localeCompare(b, 'fr');
+        });
         const html = brands.map(brand => {
           const count = Object.keys(CATALOG[state.deviceType][brand]).length;
           const logoUrl = BRAND_LOGOS[brand];
@@ -1599,6 +1610,20 @@
         document.getElementById('step3').classList.toggle('hidden', step !== 3);
         setStep(step);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function navigateToStep(step) {
+        if (step === 1) {
+          goStep(1);
+        } else if (step === 2) {
+          if (state.brand) {
+            goStep(2);
+          }
+        } else if (step === 3) {
+          if (state.model) {
+            goStep(3);
+          }
+        }
       }
 
       function setStep(active) {
